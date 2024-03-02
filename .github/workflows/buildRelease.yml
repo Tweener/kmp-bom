@@ -1,4 +1,4 @@
-name: Kmplate-lib build
+name: kmp-bom build
 
 on:
   workflow_call:
