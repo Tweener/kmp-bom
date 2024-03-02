@@ -14,33 +14,11 @@ object Dependencies {
         const val dependencyVersionsPlugin = "0.51.0"
         const val nexusSonatype = "2.0.0-rc-1"
         const val dokka = "1.9.10"
+        const val bomGeneratorPlugin = "1.0.0.Final"
         const val annotations = "1.7.1"
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
-
-        // TODO Rename MyProject to your project name
-        object MyProject {
-            const val packageName = "com.tweener.changehere" // TODO Change this
-            const val versionName = "1.0.0"
-            const val namespace = "$packageName.android"
-            const val compileSDK = 34
-            const val minSDK = 24
-
-            // TODO Change all the values in this block to your needs
-            object Maven {
-                const val name = "MyKMPLibrary"
-                const val description = "All Tweener commons stuff for Kotlin Multiplatform"
-                const val group = "io.github.tweener"
-                const val packageUrl = "https://github.com/Tweener/kmp-common"
-                const val gitUrl = "github.com:Tweener/kmp-common.git"
-
-                object Developer {
-                    const val id = "Tweener"
-                    const val name = "Vivien Mahé"
-                    const val email = "vivien@tweener-labs.com"
-                }
-            }
-        }
+        const val realm = "1.13.0"
 
         object Compiler {
             const val jvmTarget = "17"
@@ -64,6 +42,7 @@ object Dependencies {
 
         const val napier = "io.github.aakira:napier:${Versions.napier}"
         const val annotations = "androidx.annotation:annotation:${Versions.annotations}"
+        const val realm = "io.realm.kotlin:library-base:${Versions.realm}"
 
         object Tweener {
             const val common = "io.github.tweener:kmp-common:${Versions.Tweener.common}"

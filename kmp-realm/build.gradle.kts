@@ -1,21 +1,22 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("io.realm.kotlin")
     id("org.jetbrains.dokka")
     id("maven-publish")
     id("signing")
 }
 
 android {
-    namespace = Dependencies.Versions.MyProject.namespace
-    compileSdk = Dependencies.Versions.MyProject.compileSDK
+    namespace = BomConfiguration.Libraries.Realm.namespace
+    compileSdk = BomConfiguration.compileSDK
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = Dependencies.Versions.MyProject.minSDK
+        minSdk = BomConfiguration.minSDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -62,7 +63,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "changehere"
+            baseName = "kmp-realm"
             isStatic = true
         }
     }
@@ -78,6 +79,9 @@ kotlin {
 
             // Coroutines
             implementation(Dependencies.Libraries.Coroutines.core)
+
+            // Realm
+            api(Dependencies.Libraries.realm)
         }
 
         androidMain.dependencies {
@@ -107,8 +111,8 @@ val javadocJar = tasks.create<Jar>("javadocJar") {
     from(dokkaOutputDir)
 }
 
-group = Dependencies.Versions.MyProject.Maven.group
-version = Dependencies.Versions.MyProject.versionName
+group = MavenPublishing.group
+version = BomConfiguration.Libraries.Realm.version
 
 publishing {
     publications {
@@ -116,9 +120,9 @@ publishing {
             artifact(javadocJar)
 
             pom {
-                name.set(Dependencies.Versions.MyProject.Maven.name)
-                description.set(Dependencies.Versions.MyProject.Maven.description)
-                url.set(Dependencies.Versions.MyProject.Maven.packageUrl)
+                name.set(MavenPublishing.Libraries.Realm.name)
+                description.set(MavenPublishing.Libraries.Realm.description)
+                url.set(MavenPublishing.Libraries.Realm.packageUrl)
 
                 licenses {
                     license {
@@ -129,21 +133,21 @@ publishing {
 
                 issueManagement {
                     system.set("GitHub Issues")
-                    url.set("${Dependencies.Versions.MyProject.Maven.packageUrl}/issues")
+                    url.set("${MavenPublishing.Libraries.Realm.packageUrl}/issues")
                 }
 
                 developers {
                     developer {
-                        id.set(Dependencies.Versions.MyProject.Maven.Developer.id)
-                        name.set(Dependencies.Versions.MyProject.Maven.Developer.name)
-                        email.set(Dependencies.Versions.MyProject.Maven.Developer.email)
+                        id.set(MavenPublishing.Developer.id)
+                        name.set(MavenPublishing.Developer.name)
+                        email.set(MavenPublishing.Developer.email)
                     }
                 }
 
                 scm {
-                    connection.set("scm:git:git://${Dependencies.Versions.MyProject.Maven.gitUrl}")
-                    developerConnection.set("scm:git:ssh://${Dependencies.Versions.MyProject.Maven.gitUrl}")
-                    url.set(Dependencies.Versions.MyProject.Maven.packageUrl)
+                    connection.set("scm:git:git://${MavenPublishing.Libraries.Realm.gitUrl}")
+                    developerConnection.set("scm:git:ssh://${MavenPublishing.Libraries.Realm.gitUrl}")
+                    url.set(MavenPublishing.Libraries.Realm.packageUrl)
                 }
             }
         }

@@ -6,7 +6,9 @@ plugins {
     id("com.android.library").version(Dependencies.Versions.gradle).apply(false)
     id("org.jetbrains.dokka").version(Dependencies.Versions.dokka).apply(false)
     id("io.github.gradle-nexus.publish-plugin").version(Dependencies.Versions.nexusSonatype)
+    id("io.github.gradlebom.generator-plugin").version(Dependencies.Versions.bomGeneratorPlugin).apply(false)
     id("com.github.ben-manes.versions").version(Dependencies.Versions.dependencyVersionsPlugin) // ./gradlew dependencyUpdates
+    id("io.realm.kotlin").version(Dependencies.Versions.realm).apply(false)
 }
 
 tasks.register("clean", Delete::class) {
