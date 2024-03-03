@@ -19,6 +19,7 @@ object Dependencies {
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
         const val realm = "1.13.0"
+        const val firebaseGitLiveApp = "1.11.1" // Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 
         object Compiler {
             const val jvmTarget = "17"
@@ -27,6 +28,10 @@ object Dependencies {
 
         object Tweener {
             const val common = "1.0.0"
+        }
+
+        object KotlinX {
+            const val serializationJson = "1.6.2"
         }
 
         object Android {
@@ -48,12 +53,24 @@ object Dependencies {
             const val common = "io.github.tweener:kmp-common:${Versions.Tweener.common}"
         }
 
+        object KotlinX {
+            const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinX.serializationJson}"
+        }
+
         object Coroutines {
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
 
             object Android {
                 const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
             }
+        }
+
+        object FirebaseGitLiveApp {
+            const val firestore = "dev.gitlive:firebase-firestore:${Versions.firebaseGitLiveApp}"
+            const val config = "dev.gitlive:firebase-config:${Versions.firebaseGitLiveApp}"
+            const val auth = "dev.gitlive:firebase-auth:${Versions.firebaseGitLiveApp}"
+            const val functions = "dev.gitlive:firebase-functions:${Versions.firebaseGitLiveApp}"
+            const val crashlytics = "dev.gitlive:firebase-crashlytics:${Versions.firebaseGitLiveApp}"
         }
 
         object Android {

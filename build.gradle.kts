@@ -4,6 +4,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     kotlin("multiplatform").version(Dependencies.Versions.kotlin).apply(false)
     id("com.android.library").version(Dependencies.Versions.gradle).apply(false)
+    kotlin("plugin.serialization").version(Dependencies.Versions.kotlin).apply(false)
     id("org.jetbrains.dokka").version(Dependencies.Versions.dokka).apply(false)
     id("io.github.gradle-nexus.publish-plugin").version(Dependencies.Versions.nexusSonatype)
     id("io.github.gradlebom.generator-plugin").version(Dependencies.Versions.bomGeneratorPlugin).apply(false)

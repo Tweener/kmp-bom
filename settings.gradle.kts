@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 rootProject.name = "kmp-bom"
 include(":kmp-bom")
 include(":kmp-common")
+include(":kmp-firebase")
 include(":kmp-realm")

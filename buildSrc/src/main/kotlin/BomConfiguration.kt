@@ -19,6 +19,12 @@ object BomConfiguration {
             const val namespace = "$packageName.android"
         }
 
+        object Firebase {
+            const val packageName = "com.tweener.firebase"
+            const val version = "1.0.1"
+            const val namespace = "$packageName.android"
+        }
+
         object Realm {
             const val packageName = "com.tweener.realm"
             const val version = "1.0.1"
