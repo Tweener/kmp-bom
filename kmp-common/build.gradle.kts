@@ -1,14 +1,13 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("io.realm.kotlin")
     id("org.jetbrains.dokka")
     id("maven-publish")
     id("signing")
 }
 
 android {
-    namespace = BomConfiguration.Libraries.Realm.namespace
+    namespace = BomConfiguration.Libraries.Common.namespace
     compileSdk = BomConfiguration.compileSDK
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -63,7 +62,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "kmp-realm"
+            baseName = "kmp-common"
             isStatic = true
         }
     }
@@ -74,14 +73,8 @@ kotlin {
             implementation(Dependencies.Libraries.napier)
             implementation(Dependencies.Libraries.annotations)
 
-            // Tweener
-            implementation(Dependencies.Libraries.Tweener.common)
-
             // Coroutines
             implementation(Dependencies.Libraries.Coroutines.core)
-
-            // Realm
-            api(Dependencies.Libraries.realm)
         }
 
         androidMain.dependencies {
@@ -112,7 +105,7 @@ val javadocJar = tasks.create<Jar>("javadocJar") {
 }
 
 group = MavenPublishing.group
-version = BomConfiguration.Libraries.Realm.version
+version = BomConfiguration.Libraries.Common.version
 
 publishing {
     publications {
@@ -120,9 +113,9 @@ publishing {
             artifact(javadocJar)
 
             pom {
-                name.set(MavenPublishing.Libraries.Realm.name)
-                description.set(MavenPublishing.Libraries.Realm.description)
-                url.set(MavenPublishing.Libraries.Realm.packageUrl)
+                name.set(MavenPublishing.Libraries.Common.name)
+                description.set(MavenPublishing.Libraries.Common.description)
+                url.set(MavenPublishing.Libraries.Common.packageUrl)
 
                 licenses {
                     license {
@@ -133,7 +126,7 @@ publishing {
 
                 issueManagement {
                     system.set(MavenPublishing.IssueManagement.system)
-                    url.set("${MavenPublishing.Libraries.Realm.packageUrl}/issues")
+                    url.set("${MavenPublishing.Libraries.Common.packageUrl}/issues")
                 }
 
                 developers {
@@ -145,9 +138,9 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:git://${MavenPublishing.Libraries.Realm.gitUrl}")
-                    developerConnection.set("scm:git:ssh://${MavenPublishing.Libraries.Realm.gitUrl}")
-                    url.set(MavenPublishing.Libraries.Realm.packageUrl)
+                    connection.set("scm:git:git://${MavenPublishing.Libraries.Common.gitUrl}")
+                    developerConnection.set("scm:git:ssh://${MavenPublishing.Libraries.Common.gitUrl}")
+                    url.set(MavenPublishing.Libraries.Common.packageUrl)
                 }
             }
         }

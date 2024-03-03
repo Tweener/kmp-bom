@@ -13,6 +13,12 @@ object BomConfiguration {
 
     object Libraries {
 
+        object Common {
+            const val packageName = "com.tweener.common"
+            const val version = "1.0.2"
+            const val namespace = "$packageName.android"
+        }
+
         object Realm {
             const val packageName = "com.tweener.realm"
             const val version = "1.0.1"
