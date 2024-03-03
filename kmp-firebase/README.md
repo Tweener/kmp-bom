@@ -2,7 +2,7 @@
 
 kmp-firebase is a Kotlin Multiplatform library which wraps [GitLiveApp Firebase SDK](https://github.com/GitLiveApp/firebase-kotlin-sdk) and provides a more straightforward implementation.
 
-### 💾 Installation
+## 💾 Installation
 
 Add the dependency in the `sourceSet` of your module:
 

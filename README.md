@@ -7,7 +7,7 @@ The [Bill of Materials](https://maven.apache.org/guides/introduction/introductio
 - **[kmp-firebase](https://github.com/Tweener/kmp-bom/tree/main/kmp-firebase)**: A wrapper for [GitLiveApp Firebase SDK](https://github.com/GitLiveApp/firebase-kotlin-sdk) which provides a more straightforward configuration and usage.
 - **[kmp-realm](https://github.com/Tweener/kmp-bom/tree/main/kmp-realm)**: A wrapper for [Kotlin Realm](https://github.com/realm/realm-kotlin) which provides a more straightforward configuration and usage.
 
-# 💾 Installation
+## 💾 Installation
 
 Add the BoM dependency to the `sourceSet` of your module and include any specific dependencies you wish to use:
 

@@ -2,7 +2,7 @@
 
 kmp-realm a Kotlin Multiplatform library which wraps [Kotlin Realm](https://github.com/realm/realm-kotlin) with pre-configuration.
 
-### 💾 Installation
+## 💾 Installation
 
 1️⃣ Add the dependency in the `sourceSet` of all modules that require Realm:
 

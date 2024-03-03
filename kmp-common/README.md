@@ -2,7 +2,7 @@
 
 kmp-common a Kotlin Multiplatform library providing shared functionality and utilities to enhance Kotlin language and specific Kotlin Multiplatform targets.
 
-### 💾 Installation
+## 💾 Installation
 
 Add the dependency in the `sourceSet` of your module:
 
