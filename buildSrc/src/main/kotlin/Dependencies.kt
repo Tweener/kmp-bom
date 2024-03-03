@@ -26,10 +26,6 @@ object Dependencies {
             val javaCompatibility = JavaVersion.VERSION_17
         }
 
-        object Tweener {
-            const val common = "1.0.0"
-        }
-
         object KotlinX {
             const val serializationJson = "1.6.2"
         }
@@ -48,10 +44,6 @@ object Dependencies {
         const val napier = "io.github.aakira:napier:${Versions.napier}"
         const val annotations = "androidx.annotation:annotation:${Versions.annotations}"
         const val realm = "io.realm.kotlin:library-base:${Versions.realm}"
-
-        object Tweener {
-            const val common = "io.github.tweener:kmp-common:${Versions.Tweener.common}"
-        }
 
         object KotlinX {
             const val serializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinX.serializationJson}"

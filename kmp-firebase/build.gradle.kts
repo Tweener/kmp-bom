@@ -75,7 +75,7 @@ kotlin {
             implementation(Dependencies.Libraries.annotations)
 
             // Tweener
-            implementation(Dependencies.Libraries.Tweener.common)
+            implementation(project(":kmp-common"))
 
             // Coroutines
             implementation(Dependencies.Libraries.Coroutines.core)
