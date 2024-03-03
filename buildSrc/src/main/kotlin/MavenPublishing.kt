@@ -24,6 +24,13 @@ object MavenPublishing {
 
     object Libraries {
 
+        object Bom {
+            const val name = "KMPBom"
+            const val description = "Bill of Materials (BoM) for all Tweener Kotlin Multiplatform libraries"
+            const val packageUrl = "https://github.com/Tweener/kmp-bom"
+            const val gitUrl = "github.com:Tweener/kmp-bom.git"
+        }
+
         object Common {
             const val name = "KMPCommon"
             const val description = "All Tweener commons stuff for Kotlin Multiplatform"

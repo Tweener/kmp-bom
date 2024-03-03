@@ -36,7 +36,7 @@ jobs:
             os: ubuntu-latest
           - target: publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: publishMavenPublicationToSonatypeRepository
+          - target: publishBomPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
