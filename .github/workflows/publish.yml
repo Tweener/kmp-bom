@@ -36,6 +36,8 @@ jobs:
             os: ubuntu-latest
           - target: publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
+          - target: publishMavenPublicationToSonatypeRepository
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
     steps:
