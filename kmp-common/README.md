@@ -1,6 +1,6 @@
 # kmp-realm
 
-kmp-common a Kotlin Multiplatform library which brings lots of tools and functions to enhance Kotlin language and specific KMP targets.
+kmp-common a Kotlin Multiplatform library providing shared functionality and utilities to enhance Kotlin language and specific Kotlin Multiplatform targets.
 
 ### 💾 Installation
 
