@@ -4,10 +4,10 @@ kmp-firebase is a Kotlin Multiplatform library which wraps [GitLiveApp Firebase 
 
 ### 💾 Installation
 
-Add the dependency in the sourceSet of your module:
+Add the dependency in the `sourceSet` of your module:
 
 ```groovy
-implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version"))
+implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version")) // Mandatory
 implementation("io.github.tweener:kmp-firebase")
 ```
 

@@ -4,10 +4,10 @@ kmp-realm a Kotlin Multiplatform library which wraps [Kotlin Realm](https://gith
 
 ### 💾 Installation
 
-1️⃣ Add the dependency in the sourceSet of all modules that require Realm:
+1️⃣ Add the dependency in the `sourceSet` of all modules that require Realm:
 
 ```groovy
-implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version"))
+implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version")) // Mandatory
 implementation("io.github.tweener:kmp-realm")
 ```
 

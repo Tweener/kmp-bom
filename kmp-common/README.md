@@ -4,10 +4,10 @@ kmp-common a Kotlin Multiplatform library which brings lots of tools and functio
 
 ### 💾 Installation
 
-Add the dependency in the sourceSet of your module:
+Add the dependency in the `sourceSet` of your module:
 
 ```groovy
-implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version"))
+implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom_version")) // Mandatory
 implementation("io.github.tweener:kmp-common")
 ```
 
