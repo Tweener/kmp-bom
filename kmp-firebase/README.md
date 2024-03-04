@@ -16,7 +16,7 @@ is: [![](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fs01.o
 
 ### ⚙️ Usage
 
-##### Authentication
+#### Authentication
 
 Create an instance of `FirebaseAuthDataSource` to perform authentication methods on the device's user:
 
@@ -36,7 +36,7 @@ firebaseAuthDataSource.authenticateWithGoogleIdToken(idToken = "...") // Pass he
 firebaseAuthDataSource.signOut()
 ```
 
-##### Firestore
+#### Firestore
 
 Create an instance of `FirestoreService` to manage your Firestore collections. All documents models must extend `com.tweener.firebase.firestore.model.FirestoreModel`.
 
@@ -85,7 +85,7 @@ firestoreService.delete(
 )
 ```
 
-##### Functions
+#### Functions
 
 Create an instance of `FirebaseFunctionsService` to call a Cloud Function and specify its request and response types:
 
@@ -104,7 +104,7 @@ assertTrue(response.firstname, "John")
 assertTrue(response.lastname, "Doe")
 ```
 
-##### Remote Config
+#### Remote Config
 
 Create an instance of `RemoteConfigDataSource` to retrieve properties set in Firebase Remote Config.
 A `RemoteConfigService(isDebug: Boolean)` is required to initialize a `RemoteConfigDataSource`.
@@ -124,7 +124,7 @@ val defaultUsername: String = remoteConfigDataSource.getString(key = "defaultUse
 val defaultRequestTimeoutInSeconds: Long = remoteConfigDataSource.getLong(key = "defaultRequestTimeoutInSeconds", defaultValue = 30L)
 ```
 
-##### Crashlytics
+#### Crashlytics
 
 Create an instance of `CrashlyticsService` to access Firebase Crashlytics.
 
