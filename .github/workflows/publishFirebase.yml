@@ -1,4 +1,4 @@
-name: Publish [kmp-common] to Maven Central
+name: Publish [kmp-firebase] to Maven Central
 
 permissions:
   contents: read
@@ -26,15 +26,15 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: :kmp-common:publishIosArm64PublicationToSonatypeRepository
+          - target: :kmp-firebase:publishIosArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishIosSimulatorArm64PublicationToSonatypeRepository
+          - target: :kmp-firebase:publishIosSimulatorArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishIosX64PublicationToSonatypeRepository
+          - target: :kmp-firebase:publishIosX64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
+          - target: :kmp-firebase:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
+          - target: :kmp-firebase:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 

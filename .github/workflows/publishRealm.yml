@@ -1,4 +1,4 @@
-name: Publish [kmp-common] to Maven Central
+name: Publish [kmp-realm] to Maven Central
 
 permissions:
   contents: read
@@ -26,15 +26,15 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: :kmp-common:publishIosArm64PublicationToSonatypeRepository
+          - target: :kmp-realm:publishIosArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishIosSimulatorArm64PublicationToSonatypeRepository
+          - target: :kmp-realm:publishIosSimulatorArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishIosX64PublicationToSonatypeRepository
+          - target: :kmp-realm:publishIosX64PublicationToSonatypeRepository
             os: macos-latest
-          - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
+          - target: :kmp-realm:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
+          - target: :kmp-realm:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
