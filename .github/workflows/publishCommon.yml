@@ -26,17 +26,17 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: publishIosArm64PublicationToSonatypeRepository
+          - target: :kmp-common:publishIosArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: publishIosSimulatorArm64PublicationToSonatypeRepository
+          - target: :kmp-common:publishIosSimulatorArm64PublicationToSonatypeRepository
             os: macos-latest
-          - target: publishIosX64PublicationToSonatypeRepository
+          - target: :kmp-common:publishIosX64PublicationToSonatypeRepository
             os: macos-latest
-          - target: publishAndroidReleasePublicationToSonatypeRepository
+          - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: publishKotlinMultiplatformPublicationToSonatypeRepository
+          - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: publishBomPublicationToSonatypeRepository
+          - target: :kmp-common:publishBomPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
@@ -71,7 +71,7 @@ jobs:
         with:
           arguments: |
             ${{ matrix.target }}
-            closeAndReleaseSonatypeStagingRepository
+            closeSonatypeStagingRepository
             -Psigning.gnupg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
             -Psigning.gnupg.keyName=${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
             -PsonatypeUsername=${{ secrets.OSSRH_USERNAME }}
