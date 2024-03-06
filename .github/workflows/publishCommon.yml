@@ -1,4 +1,4 @@
-name: Publish to Maven Central
+name: Publish Common to Maven Central
 
 permissions:
   contents: read
@@ -35,8 +35,6 @@ jobs:
           - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
           - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
-            os: ubuntu-latest
-          - target: :kmp-common:publishBomPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
