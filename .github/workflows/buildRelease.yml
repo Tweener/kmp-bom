@@ -1,4 +1,4 @@
-name: kmp-bom build
+name: Build [BoM - All libraries]
 
 on:
   workflow_call:

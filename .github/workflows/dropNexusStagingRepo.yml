@@ -1,0 +1,28 @@
+name: Drop Nexus Staging repository
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      stagingRepositoryId:
+        description: 'Nexus Staging repo ID'
+        required: true
+        type: string
+
+jobs:
+  drop:
+    env:
+      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Drops any existing staging repository due to a previously uploaded artifacts after a job failure
+        uses: nexus-actions/drop-nexus-staging-repo@main
+        with:
+          username: ${{ secrets.OSSRH_USERNAME }}
+          password: ${{ secrets.OSSRH_PASSWORD }}
+          staging_repository_id: ${{ inputs.stagingRepositoryId }}
