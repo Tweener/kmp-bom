@@ -66,8 +66,15 @@ jobs:
           gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
+      - name: Drops any existing staging repository due to a previously updloaded artifacts after a job failure
+        uses: nexus-actions/drop-nexus-staging-repo@main
+        with:
+          username: ${{ secrets.OSSRH_USERNAME }}
+          password: ${{ secrets.OSSRH_PASSWORD }}
+          staging_repository_id: ${{ secrets.OSSRH_STAGING_PROFILE_ID }}
+
       - name: Gradle publish
-        uses: gradle/gradle-build-action@ce999babab2de1c4b649dc15f0ee67e6246c994f
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: |
             ${{ matrix.target }}
