@@ -3,11 +3,14 @@ plugins {
     id("signing")
 }
 
-
 // region Publishing
 
 group = MavenPublishing.group
 version = BomConfiguration.version
+
+bomGenerator {
+    includeDependency(Dependencies.Libraries.Tweener.charts)
+}
 
 publishing {
     publications {
