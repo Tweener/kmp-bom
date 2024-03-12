@@ -6,6 +6,7 @@ The [Bill of Materials](https://maven.apache.org/guides/introduction/introductio
 - **[kmp-common](https://github.com/Tweener/kmp-bom/tree/main/kmp-common)**: A core library providing shared functionality and utilities to enhance Kotlin language and specific Kotlin Multiplatform targets.
 - **[kmp-firebase](https://github.com/Tweener/kmp-bom/tree/main/kmp-firebase)**: A wrapper for [GitLiveApp Firebase SDK](https://github.com/GitLiveApp/firebase-kotlin-sdk) which provides a more straightforward configuration and usage.
 - **[kmp-realm](https://github.com/Tweener/kmp-bom/tree/main/kmp-realm)**: A wrapper for [Kotlin Realm](https://github.com/realm/realm-kotlin) which provides a more straightforward configuration and usage.
+- **[kmp-charts](https://github.com/Tweener/kmp-charts)**: (_external lib_) A Kotlin/Compose Multiplatform library that offers many different types of charts to display data.
 
 ## 💾 Installation
 
@@ -16,6 +17,7 @@ implementation(project.dependencies.platform("io.github.tweener:kmp-bom:$kmp-bom
 implementation("io.github.tweener:kmp-common")
 implementation("io.github.tweener:kmp-firebase")
 implementation("io.github.tweener:kmp-realm")
+implementation("io.github.tweener:kmp-charts")
 ```
 
 _The latest version is: [![](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepo_groups%2Fpublic%2Fcontent%2Fio%2Fgithub%2Ftweener%2Fkmp-bom%2Fmaven-metadata.xml)](https://central.sonatype.com/artifact/io.github.tweener/kmp-bom)_
