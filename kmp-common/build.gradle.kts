@@ -71,18 +71,19 @@ kotlin {
 
         commonMain.dependencies {
             implementation(Dependencies.Libraries.napier)
-            implementation(Dependencies.Libraries.annotations)
+            api(Dependencies.Libraries.annotations)
 
             // Coroutines
-            implementation(Dependencies.Libraries.Coroutines.core)
+            api(Dependencies.Libraries.Coroutines.core)
+            api(Dependencies.Libraries.kotlinXDatetime)
         }
 
         androidMain.dependencies {
             // Coroutines
-            implementation(Dependencies.Libraries.Coroutines.Android.android)
+            api(Dependencies.Libraries.Coroutines.Android.android)
 
             // Android
-            implementation(Dependencies.Libraries.Android.AndroidX.core)
+            api(Dependencies.Libraries.Android.AndroidX.core)
         }
 
         iosMain.dependencies {
