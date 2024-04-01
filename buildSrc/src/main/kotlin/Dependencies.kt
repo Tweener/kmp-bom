@@ -18,6 +18,7 @@ object Dependencies {
         const val annotations = "1.7.1"
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
+        const val kotlinxDatetime = "0.6.0-RC.2"
         const val realm = "1.13.0"
         const val firebaseGitLiveApp = "1.11.1" // Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 
@@ -27,7 +28,7 @@ object Dependencies {
         }
 
         object Tweener {
-            const val charts = "1.0.0"
+            const val charts = "1.0.1"
         }
 
         object KotlinX {
@@ -46,6 +47,7 @@ object Dependencies {
     object Libraries {
 
         const val napier = "io.github.aakira:napier:${Versions.napier}"
+        const val kotlinXDatetime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDatetime}"
         const val annotations = "androidx.annotation:annotation:${Versions.annotations}"
         const val realm = "io.realm.kotlin:library-base:${Versions.realm}"
 
