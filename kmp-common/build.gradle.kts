@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    kotlin("plugin.parcelize")
     id("org.jetbrains.dokka")
     id("maven-publish")
     id("signing")
