@@ -15,6 +15,7 @@ jobs:
 
   publish-bom:
     name: Publish BoM
+    needs: build-release
 
     env:
       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
