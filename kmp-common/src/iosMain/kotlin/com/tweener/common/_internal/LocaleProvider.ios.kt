@@ -1,6 +1,7 @@
 package com.tweener.common._internal
 
 import platform.Foundation.NSLocale
+import platform.Foundation.countryCode
 import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 
@@ -10,7 +11,8 @@ import platform.Foundation.languageCode
  */
 
 class IOSLocaleProvider : LocaleProvider {
-    override fun getLocale(): String = NSLocale.currentLocale.languageCode
+    override fun getLanguage(): String = NSLocale.currentLocale.languageCode
+    override fun getCountry(): String = NSLocale.currentLocale.countryCode ?: "US"
 }
 
 actual fun createLocaleProvider(): LocaleProvider = IOSLocaleProvider()

@@ -8,7 +8,8 @@ import java.util.Locale
  */
 
 class AndroidLocaleProvider : LocaleProvider {
-    override fun getLocale(): String = Locale.getDefault().language
+    override fun getLanguage(): String = Locale.getDefault().language
+    override fun getCountry(): String = Locale.getDefault().country
 }
 
 actual fun createLocaleProvider(): LocaleProvider = AndroidLocaleProvider()
