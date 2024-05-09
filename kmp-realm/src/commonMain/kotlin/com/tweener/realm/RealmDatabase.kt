@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.map
  * @since 08/02/2024
  */
 class RealmDatabase(
-    private val schema: Set<KClass<out TypedRealmObject>>
+    private val schema: Set<KClass<out TypedRealmObject>>,
 ) {
 
     val realm: Realm by lazy {
