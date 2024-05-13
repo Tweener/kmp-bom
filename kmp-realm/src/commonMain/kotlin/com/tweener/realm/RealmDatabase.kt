@@ -53,4 +53,12 @@ class RealmDatabase(
             }
         }
     }
+
+    inline fun <reified T : RealmObject> delete(instance: T) {
+        realm.writeBlocking {
+            findLatest(instance)?.also {
+                delete(it)
+            }
+        }
+    }
 }
