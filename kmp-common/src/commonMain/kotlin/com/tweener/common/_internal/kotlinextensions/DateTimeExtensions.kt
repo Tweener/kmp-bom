@@ -4,6 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
@@ -17,6 +18,10 @@ import kotlinx.datetime.toLocalDateTime
 fun LocalDateTime.Companion.now(timeZone: TimeZone = TimeZone.currentSystemDefault()) = Clock.System.now().toLocalDateTime(timeZone)
 
 fun LocalDate.Companion.now(timeZone: TimeZone = TimeZone.currentSystemDefault()) = LocalDateTime.now(timeZone).date
+
+fun LocalTime.Companion.now(timeZone: TimeZone = TimeZone.currentSystemDefault()) = LocalDateTime.now(timeZone).time
+
+fun LocalDate.toLocalDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()) = this.atTime(time = LocalTime.now(timeZone))
 
 fun LocalDate.isAfter(other: LocalDate) = this > other
 fun LocalDate.isBefore(other: LocalDate) = this < other
