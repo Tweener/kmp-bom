@@ -5,7 +5,7 @@ package com.tweener.common._internal
  * @since 30/04/2024
  */
 interface CurrencyProvider {
-    fun getCurrencyCode(): String
+    fun getCurrencyCode(): String?
 }
 
 expect fun createCurrencyProvider(localeProvider: LocaleProvider): CurrencyProvider

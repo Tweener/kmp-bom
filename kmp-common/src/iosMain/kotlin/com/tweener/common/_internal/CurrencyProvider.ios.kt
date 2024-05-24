@@ -12,7 +12,7 @@ import platform.Foundation.localeWithLocaleIdentifier
 class IOSCurrencyProvider(
     private val localeProvider: LocaleProvider,
 ) : CurrencyProvider {
-    override fun getCurrencyCode(): String = NSLocale.localeWithLocaleIdentifier(localeProvider.getLanguage()).currencyCode ?: "USD"
+    override fun getCurrencyCode(): String? = NSLocale.localeWithLocaleIdentifier(localeProvider.getLanguage()).currencyCode
 }
 
 actual fun createCurrencyProvider(localeProvider: LocaleProvider): CurrencyProvider = IOSCurrencyProvider(localeProvider)

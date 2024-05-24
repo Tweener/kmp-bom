@@ -11,7 +11,7 @@ import java.util.Locale
 class AndroidCurrencyProvider(
     private val localeProvider: LocaleProvider,
 ) : CurrencyProvider {
-    override fun getCurrencyCode(): String {
+    override fun getCurrencyCode(): String? {
         val locale = Locale(localeProvider.getLanguage(), localeProvider.getCountry())
         return Currency.getInstance(locale).currencyCode
     }

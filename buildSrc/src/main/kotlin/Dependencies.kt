@@ -18,7 +18,7 @@ object Dependencies {
         const val annotations = "1.7.1"
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
-        const val kotlinxDatetime = "0.6.0-RC.2"
+        const val kotlinxDatetime = "0.6.0"
         const val realm = "1.13.0"
         const val firebaseGitLiveApp = "1.11.1" // Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 
