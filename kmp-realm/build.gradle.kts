@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -50,10 +53,9 @@ kotlin {
     androidTarget {
         publishLibraryVariants("release")
 
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = Dependencies.Versions.Compiler.jvmTarget
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.fromTarget(Dependencies.Versions.Compiler.jvmTarget))
         }
     }
 
@@ -100,7 +102,7 @@ kotlin {
 
 // Don't cache SNAPSHOT (changing) dependencies.
 configurations.all {
-    resolutionStrategy.cacheChangingModulesFor(0,TimeUnit.SECONDS)
+    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
 
 // region Publishing
