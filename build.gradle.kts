@@ -10,7 +10,13 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin").version(Dependencies.Versions.nexusSonatype)
     id("io.github.gradlebom.generator-plugin").version(Dependencies.Versions.bomGeneratorPlugin).apply(false)
     id("com.github.ben-manes.versions").version(Dependencies.Versions.dependencyVersionsPlugin) // ./gradlew dependencyUpdates
-    id("io.realm.kotlin").version(Dependencies.Versions.realm).apply(false)
+//    id("io.realm.kotlin").version(Dependencies.Versions.realm).apply(false)
+}
+
+buildscript {
+    dependencies {
+        classpath("io.realm.kotlin:gradle-plugin:${Dependencies.Versions.realm}")
+    }
 }
 
 tasks.register("clean", Delete::class) {

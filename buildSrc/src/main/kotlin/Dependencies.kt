@@ -9,8 +9,8 @@ object Dependencies {
 
     object Versions {
 
-        const val kotlin = "1.9.21"
-        const val gradle = "8.1.4"
+        const val kotlin = "2.0.0"
+        const val gradle = "8.2.2"
         const val dependencyVersionsPlugin = "0.51.0"
         const val nexusSonatype = "2.0.0-rc-1"
         const val dokka = "1.9.10"
@@ -19,7 +19,7 @@ object Dependencies {
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
         const val kotlinxDatetime = "0.6.0"
-        const val realm = "1.13.0"
+        const val realm = "2.0.0-SNAPSHOT"
         const val firebaseGitLiveApp = "1.11.1" // Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 
         object Compiler {

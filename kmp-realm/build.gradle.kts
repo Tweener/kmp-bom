@@ -98,6 +98,11 @@ kotlin {
     }
 }
 
+// Don't cache SNAPSHOT (changing) dependencies.
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0,TimeUnit.SECONDS)
+}
+
 // region Publishing
 
 // Dokka configuration
