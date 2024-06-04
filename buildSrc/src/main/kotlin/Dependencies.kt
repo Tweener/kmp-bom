@@ -19,7 +19,7 @@ object Dependencies {
         const val coroutines = "1.7.3"
         const val napier = "2.6.1"
         const val kotlinxDatetime = "0.6.0"
-        const val realm = "2.0.0-SNAPSHOT"
+        const val realm = "2.0.0"
         const val firebaseGitLiveApp = "1.11.1" // Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 
         object Compiler {
@@ -28,7 +28,7 @@ object Dependencies {
         }
 
         object Tweener {
-            const val charts = "1.0.1"
+            const val charts = "1.1.0"
         }
 
         object KotlinX {

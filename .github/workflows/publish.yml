@@ -133,6 +133,7 @@ jobs:
             -PsonatypeStagingProfileId=${{ secrets.OSSRH_STAGING_PROFILE_ID }}
 
   notify:
+    name: Send Slack notification
     needs: publish-bom
     uses: ./.github/workflows/notify.yml
     secrets:
