@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.gradlebom.generator-plugin").version(Dependencies.Versions.bomGeneratorPlugin)
+    alias(libs.plugins.bom.generator)
     id("signing")
 }
 
@@ -9,7 +9,7 @@ group = MavenPublishing.group
 version = BomConfiguration.version
 
 bomGenerator {
-    includeDependency(Dependencies.Libraries.Tweener.charts)
+    includeDependency(libs.tweener.charts.get().toString())
 }
 
 publishing {

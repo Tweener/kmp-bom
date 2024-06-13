@@ -2,19 +2,19 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    kotlin("multiplatform").version(Dependencies.Versions.kotlin).apply(false)
-    id("com.android.library").version(Dependencies.Versions.gradle).apply(false)
-    kotlin("plugin.serialization").version(Dependencies.Versions.kotlin).apply(false)
-    kotlin("plugin.parcelize").version(Dependencies.Versions.kotlin).apply(false)
-    id("org.jetbrains.dokka").version(Dependencies.Versions.dokka).apply(false)
-    id("io.github.gradle-nexus.publish-plugin").version(Dependencies.Versions.nexusSonatype)
-    id("io.github.gradlebom.generator-plugin").version(Dependencies.Versions.bomGeneratorPlugin).apply(false)
-    id("com.github.ben-manes.versions").version(Dependencies.Versions.dependencyVersionsPlugin) // ./gradlew dependencyUpdates
-    id("io.realm.kotlin").version(Dependencies.Versions.realm).apply(false)
+    alias(libs.plugins.kotlin.multiplatform).apply(false)
+    alias(libs.plugins.android.library).apply(false)
+    alias(libs.plugins.kotlin.serialization).apply(false)
+    alias(libs.plugins.kotlin.parcelize).apply(false)
+    alias(libs.plugins.dokka).apply(false)
+    alias(libs.plugins.nexus.sonatype)
+    alias(libs.plugins.dependency.versions) // ./gradlew dependencyUpdates
+    alias(libs.plugins.bom.generator).apply(false)
+    alias(libs.plugins.realm).apply(false)
 }
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 nexusPublishing {

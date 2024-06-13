@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
-    id("io.realm.kotlin")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.realm)
     id("maven-publish")
     id("signing")
 }
@@ -36,14 +36,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Dependencies.Versions.Compiler.javaCompatibility
-        targetCompatibility = Dependencies.Versions.Compiler.javaCompatibility
+        sourceCompatibility = ProjectConfiguration.Compiler.javaCompatibility
+        targetCompatibility = ProjectConfiguration.Compiler.javaCompatibility
 
         isCoreLibraryDesugaringEnabled = true
     }
 
     dependencies {
-        coreLibraryDesugaring(Dependencies.Libraries.Android.desugarJdkLibs)
+        coreLibraryDesugaring(libs.android.desugarjdklibs)
     }
 }
 
@@ -55,7 +55,7 @@ kotlin {
 
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.fromTarget(Dependencies.Versions.Compiler.jvmTarget))
+            jvmTarget.set(JvmTarget.fromTarget(ProjectConfiguration.Compiler.jvmTarget))
         }
     }
 
@@ -73,25 +73,25 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
-            implementation(Dependencies.Libraries.napier)
-            implementation(Dependencies.Libraries.annotations)
+            implementation(libs.napier)
+            implementation(libs.android.annotations)
 
             // Tweener
             implementation(project(":kmp-common"))
 
             // Coroutines
-            implementation(Dependencies.Libraries.Coroutines.core)
+            implementation(libs.kotlin.coroutines.core)
 
             // Realm
-            api(Dependencies.Libraries.realm)
+            api(libs.realm)
         }
 
         androidMain.dependencies {
             // Coroutines
-            implementation(Dependencies.Libraries.Coroutines.Android.android)
+            implementation(libs.kotlin.coroutines.android)
 
             // Android
-            implementation(Dependencies.Libraries.Android.AndroidX.core)
+            implementation(libs.android.core)
         }
 
         iosMain.dependencies {
@@ -103,7 +103,7 @@ kotlin {
 // region Publishing
 
 // Dokka configuration
-val dokkaOutputDir = buildDir.resolve("dokka")
+val dokkaOutputDir = rootProject.layout.buildDirectory.asFile.get().resolve("dokka")
 tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
 val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
 val javadocJar = tasks.create<Jar>("javadocJar") {
