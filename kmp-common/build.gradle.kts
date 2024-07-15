@@ -101,7 +101,8 @@ kotlin {
 // region Publishing
 
 // Dokka configuration
-val dokkaOutputDir = rootProject.layout.buildDirectory.asFile.get().resolve("dokka")
+
+val dokkaOutputDir = buildDir.resolve("dokka")
 tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
 val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
 val javadocJar = tasks.create<Jar>("javadocJar") {
