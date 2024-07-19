@@ -8,9 +8,9 @@ import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.RealmUUID
 import io.realm.kotlin.types.TypedRealmObject
-import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.reflect.KClass
 
 /**
  * @author Vivien Mahe
@@ -59,6 +59,13 @@ class RealmDatabase(
             findLatest(instance)?.also {
                 delete(it)
             }
+        }
+    }
+
+    inline fun <reified T : RealmObject> deleteAll() {
+        realm.writeBlocking {
+            val all = query<T>().find()
+            delete(all)
         }
     }
 }
