@@ -20,10 +20,8 @@ import kotlinx.coroutines.flow.flatMapLatest
  * @return A flow of type R that emits values from the flow provided by [ifTrue] when the [condition] is true,
  * or values from the flow provided by [ifFalse] when the [condition] is false.
  *
- * @sample Example usage:
  * ```
  * fun main() = runBlocking {
- *     // Define FlowA and FlowB
  *     val flowA = flowOf(true, false, true) // Sample FlowA emitting Boolean values
  *     val flowB = flowOf("Hello", "World") // Sample FlowB emitting String values
  *     val flowC = flowOf("No", "Match") // Sample FlowC emitting String values for false condition
