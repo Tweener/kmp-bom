@@ -1,4 +1,4 @@
-package com.tweener.common._internal.kotlinextensions
+package com.tweener.common._internal
 
 /**
  * Helper functions to safely combine multiple .let{} operations.
