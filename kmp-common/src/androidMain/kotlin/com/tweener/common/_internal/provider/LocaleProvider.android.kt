@@ -1,4 +1,4 @@
-package com.tweener.common._internal
+package com.tweener.common._internal.provider
 
 import java.util.Locale
 

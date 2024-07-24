@@ -1,4 +1,4 @@
-package com.tweener.common._internal
+package com.tweener.common._internal.formatter
 
 import java.text.NumberFormat
 import java.util.Currency

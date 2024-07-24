@@ -1,4 +1,4 @@
-package com.tweener.common._internal
+package com.tweener.common._internal.provider
 
 import platform.Foundation.NSLocale
 import platform.Foundation.currencyCode

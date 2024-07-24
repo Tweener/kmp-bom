@@ -10,7 +10,7 @@ napier = "2.7.1"
 kotlinxDatetime = "0.6.0"
 realm = "2.0.0"
 serializationJson = "1.6.3"
-firebaseGitLiveApp = "1.12.0" # Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
+firebaseGitLiveApp = "1.13.0" # Firebase for KMP https://firebaseopensource.com/projects/gitliveapp/firebase-kotlin-sdk/
 bomGeneratorPlugin = "1.0.0.Final"
 
 # Tweener
