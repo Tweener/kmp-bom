@@ -1,6 +1,5 @@
 package com.tweener.firebase.auth.provider.google
 
-import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import dev.gitlive.firebase.auth.FirebaseUser
 
@@ -10,6 +9,7 @@ import dev.gitlive.firebase.auth.FirebaseUser
  * This class defines the common interface and shared functionality for platform-specific Google Sign-In implementations.
  *
  * @param serverClientId The server client ID for authenticating with Google.
+ * @param firebaseAuthDataSource The data source for Firebase authentication.
  *
  * @author Vivien Mahe
  * @since 25/07/2024
@@ -17,9 +17,8 @@ import dev.gitlive.firebase.auth.FirebaseUser
 
 abstract class GoogleAuthProvider(
     protected val serverClientId: String,
+    protected val firebaseAuthDataSource: FirebaseAuthDataSource
 ) {
-    protected val firebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService())
-
     /**
      * Abstract method to initiate the Google sign-in process.
      *

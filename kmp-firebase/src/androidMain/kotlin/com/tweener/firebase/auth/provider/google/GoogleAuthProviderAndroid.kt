@@ -9,6 +9,8 @@ import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.tweener.firebase.auth.FirebaseAuthService
+import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import dev.gitlive.firebase.auth.FirebaseUser
 import io.github.aakira.napier.Napier
 
@@ -19,6 +21,7 @@ import io.github.aakira.napier.Napier
  * on an Android device. It utilizes the CredentialManager API to manage credentials and handle the sign-in process.
  *
  * @param serverClientId The server client ID for authenticating with Google.
+ * @param firebaseAuthDataSource The data source for Firebase authentication. Defaults to a new instance of FirebaseAuthDataSource.
  * @param context The context of the calling activity or application.
  * @param filterByAuthorizedAccounts Flag indicating whether to filter by authorized accounts.
  *
@@ -27,9 +30,10 @@ import io.github.aakira.napier.Napier
  */
 class GoogleAuthProviderAndroid(
     serverClientId: String,
+    firebaseAuthDataSource: FirebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService()),
     private val context: Context,
     private val filterByAuthorizedAccounts: Boolean = false,
-) : GoogleAuthProvider(serverClientId) {
+) : GoogleAuthProvider(serverClientId, firebaseAuthDataSource) {
 
     private val credentialManager = CredentialManager.create(context)
 

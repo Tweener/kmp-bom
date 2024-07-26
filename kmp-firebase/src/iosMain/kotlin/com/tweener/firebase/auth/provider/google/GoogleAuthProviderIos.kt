@@ -1,6 +1,8 @@
 package com.tweener.firebase.auth.provider.google
 
 import cocoapods.GoogleSignIn.GIDSignIn
+import com.tweener.firebase.auth.FirebaseAuthService
+import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import dev.gitlive.firebase.auth.FirebaseUser
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIApplication
@@ -14,13 +16,15 @@ import kotlin.coroutines.suspendCoroutine
  * on an iOS device. It utilizes the GIDSignIn API to manage credentials and handle the sign-in process.
  *
  * @param serverClientId The server client ID for authenticating with Google.
+ * @param firebaseAuthDataSource The data source for Firebase authentication. Defaults to a new instance of FirebaseAuthDataSource.
  *
  * @author Vivien Mahe
  * @since 25/07/2024
  */
 class GoogleAuthProviderIos(
     serverClientId: String,
-) : GoogleAuthProvider(serverClientId) {
+    firebaseAuthDataSource: FirebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService()),
+) : GoogleAuthProvider(serverClientId, firebaseAuthDataSource) {
 
     override suspend fun signIn(onResponse: (Result<FirebaseUser>) -> Unit) {
         retrieveIdToken()
