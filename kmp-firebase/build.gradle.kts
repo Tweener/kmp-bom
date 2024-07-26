@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlin.nativeCocoaPods)
     id("maven-publish")
     id("signing")
 }
@@ -70,6 +71,12 @@ kotlin {
         }
     }
 
+    cocoapods {
+        ios.deploymentTarget = ProjectConfiguration.iOS.deploymentTarget
+
+        pod("GoogleSignIn")
+    }
+
     sourceSets {
 
         commonMain.dependencies {
@@ -98,6 +105,9 @@ kotlin {
 
             // Android
             implementation(libs.android.core)
+
+            // Google Sign In
+            implementation(libs.bundles.googleSignIn)
         }
 
         iosMain.dependencies {

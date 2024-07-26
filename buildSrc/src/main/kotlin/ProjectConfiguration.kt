@@ -11,4 +11,8 @@ object ProjectConfiguration {
         const val jvmTarget = "17"
         val javaCompatibility = JavaVersion.VERSION_17
     }
+
+    object iOS {
+        const val deploymentTarget = "12.0"
+    }
 }
