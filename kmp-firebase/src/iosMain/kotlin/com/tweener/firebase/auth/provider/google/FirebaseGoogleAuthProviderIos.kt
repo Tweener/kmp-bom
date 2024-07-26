@@ -10,21 +10,21 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
- * GoogleAuthProviderIos class for handling Google Sign-In on iOS.
+ * FirebaseGoogleAuthProviderIos class for handling Google Sign-In on iOS.
  *
- * This class extends the `GoogleAuthProvider` to provide functionality for signing in users using their Google account
+ * This class extends the `FirebaseGoogleAuthProvider` to provide functionality for signing in users using their Google account
  * on an iOS device. It utilizes the GIDSignIn API to manage credentials and handle the sign-in process.
  *
- * @param serverClientId The server client ID for authenticating with Google.
  * @param firebaseAuthDataSource The data source for Firebase authentication. Defaults to a new instance of FirebaseAuthDataSource.
+ * @param serverClientId The server client ID for authenticating with Google.
  *
  * @author Vivien Mahe
  * @since 25/07/2024
  */
-class GoogleAuthProviderIos(
-    serverClientId: String,
+class FirebaseGoogleAuthProviderIos(
     firebaseAuthDataSource: FirebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService()),
-) : GoogleAuthProvider(serverClientId, firebaseAuthDataSource) {
+    serverClientId: String,
+) : FirebaseGoogleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource, serverClientId = serverClientId) {
 
     override suspend fun signIn(onResponse: (Result<FirebaseUser>) -> Unit) {
         retrieveIdToken()

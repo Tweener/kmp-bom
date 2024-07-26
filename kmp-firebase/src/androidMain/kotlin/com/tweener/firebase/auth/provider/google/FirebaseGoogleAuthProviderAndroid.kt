@@ -15,25 +15,25 @@ import dev.gitlive.firebase.auth.FirebaseUser
 import io.github.aakira.napier.Napier
 
 /**
- * GoogleAuthProviderAndroid class for handling Google Sign-In on Android.
+ * FirebaseGoogleAuthProviderAndroid class for handling Google Sign-In on Android.
  *
- * This class extends the `GoogleAuthProvider` to provide functionality for signing in users using their Google account
+ * This class extends the `FirebaseGoogleAuthProvider` to provide functionality for signing in users using their Google account
  * on an Android device. It utilizes the CredentialManager API to manage credentials and handle the sign-in process.
  *
- * @param serverClientId The server client ID for authenticating with Google.
  * @param firebaseAuthDataSource The data source for Firebase authentication. Defaults to a new instance of FirebaseAuthDataSource.
+ * @param serverClientId The server client ID for authenticating with Google.
  * @param context The context of the calling activity or application.
  * @param filterByAuthorizedAccounts Flag indicating whether to filter by authorized accounts.
  *
  * @author Vivien Mahe
  * @since 25/07/2024
  */
-class GoogleAuthProviderAndroid(
-    serverClientId: String,
+class FirebaseGoogleAuthProviderAndroid(
     firebaseAuthDataSource: FirebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService()),
+    serverClientId: String,
     private val context: Context,
     private val filterByAuthorizedAccounts: Boolean = false,
-) : GoogleAuthProvider(serverClientId, firebaseAuthDataSource) {
+) : FirebaseGoogleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource, serverClientId = serverClientId) {
 
     private val credentialManager = CredentialManager.create(context)
 
