@@ -14,8 +14,7 @@ import com.tweener.firebase.auth.provider.FirebaseAuthProvider
  * @author Vivien Mahe
  * @since 25/07/2024
  */
-
 abstract class FirebaseGoogleAuthProvider(
     firebaseAuthDataSource: FirebaseAuthDataSource,
     protected val serverClientId: String,
-) : FirebaseAuthProvider(firebaseAuthDataSource)
+) : FirebaseAuthProvider<Nothing>(firebaseAuthDataSource = firebaseAuthDataSource)

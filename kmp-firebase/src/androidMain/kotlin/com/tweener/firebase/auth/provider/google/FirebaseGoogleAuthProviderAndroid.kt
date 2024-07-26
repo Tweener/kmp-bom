@@ -5,12 +5,13 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
+import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
+import com.tweener.firebase.auth.provider.FirebaseProvider
 import dev.gitlive.firebase.auth.FirebaseUser
 import io.github.aakira.napier.Napier
 
@@ -37,7 +38,7 @@ class FirebaseGoogleAuthProviderAndroid(
 
     private val credentialManager = CredentialManager.create(context)
 
-    override suspend fun signIn(onResponse: (Result<FirebaseUser>) -> Unit) {
+    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
         try {
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(filterByAuthorizedAccounts)
@@ -52,7 +53,7 @@ class FirebaseGoogleAuthProviderAndroid(
             val result = credentialManager.getCredential(request = request, context = context)
 
             handleSignInResponse(result, onResponse)
-        } catch (throwable: GetCredentialException) {
+        } catch (throwable: Throwable) {
             Napier.e(throwable) { "Couldn't sign in the user." }
             onResponse(Result.failure(throwable))
         }
@@ -72,7 +73,7 @@ class FirebaseGoogleAuthProviderAndroid(
                             firebaseAuthDataSource
                                 .authenticateWithGoogleIdToken(idToken = idToken)
                                 ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
-                                ?: onResponse(Result.failure(GoogleAuthProviderUnknownUserException()))
+                                ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
 
                         } catch (throwable: GoogleIdTokenParsingException) {
                             Napier.e(throwable) { "Received an invalid google id token response." }
