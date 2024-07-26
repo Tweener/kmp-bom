@@ -20,9 +20,31 @@ abstract class GoogleAuthProvider(
 ) {
     protected val firebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService())
 
+    /**
+     * Abstract method to initiate the Google sign-in process.
+     *
+     * @param onResponse Callback to handle the result of the sign-in process. It returns a Result object containing a FirebaseUser on success, or an exception on failure.
+     */
     abstract suspend fun signIn(onResponse: (Result<FirebaseUser>) -> Unit)
 
+    /**
+     * Signs out the current user.
+     */
     suspend fun signOut() {
         firebaseAuthDataSource.signOut()
     }
+
+    /**
+     * Checks if a user is currently signed in.
+     *
+     * @return True if a user is signed in, false otherwise.
+     */
+    fun isUserSignedIn(): Boolean = firebaseAuthDataSource.isUserLoggedIn()
+
+    /**
+     * Retrieves the currently signed-in user.
+     *
+     * @return The currently signed-in FirebaseUser, or null if no user is signed in.
+     */
+    fun getCurrentUser(): FirebaseUser? = firebaseAuthDataSource.getCurrentUser()
 }
