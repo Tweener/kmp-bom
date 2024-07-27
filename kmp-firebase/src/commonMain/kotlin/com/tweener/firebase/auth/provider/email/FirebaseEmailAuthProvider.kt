@@ -10,8 +10,9 @@ import io.github.aakira.napier.Napier
 /**
  * FirebaseEmailAuthProvider class for handling authentication with Firebase via email.
  *
+ *
  * This class extends the `FirebaseAuthProvider` to provide functionality for signing in users using their email and password.
- * It also provides a method to create a new user with email and password.
+ * It also provides methods to create a new user with email and password and send a password reset email.
  *
  * @param firebaseAuthDataSource The data source for Firebase authentication.
  *
@@ -48,6 +49,31 @@ class FirebaseEmailAuthProvider(
                 .createUserWithEmailAndPassword(email = params.email, password = params.password)
                 ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
                 ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.EMAIL)))
+        } catch (throwable: Throwable) {
+            onResponse(Result.failure(throwable))
+        }
+    }
+
+    /**
+     * Sends a password reset email with specified parameters.
+     *
+     * @param params The parameters required for sending the password reset email, encapsulated in a ForgotPasswordParams object.
+     * @param onResponse Callback to handle the result of the password reset email process. It returns a Result object containing Unit on success, or an exception on failure.
+     */
+    suspend fun sendPasswordResetEmail(params: ForgotPasswordParams, onResponse: (Result<Unit>) -> Unit) {
+        try {
+            firebaseAuthDataSource
+                .sendPasswordResetEmail(
+                    email = params.email,
+                    url = params.url,
+                    iOSBundleId = params.iosParams?.iOSBundleId,
+                    androidPackageName = params.androidParams?.androidPackageName,
+                    installIfNotAvailable = params.androidParams?.installIfNotAvailable ?: true,
+                    minimumVersion = params.androidParams?.minimumVersion,
+                    canHandleCodeInApp = params.canHandleCodeInApp,
+                )
+
+            onResponse(Result.success(Unit))
         } catch (throwable: Throwable) {
             onResponse(Result.failure(throwable))
         }
