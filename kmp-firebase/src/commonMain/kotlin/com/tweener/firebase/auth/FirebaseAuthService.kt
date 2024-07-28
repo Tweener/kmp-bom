@@ -6,7 +6,8 @@ import dev.gitlive.firebase.auth.AndroidPackageName
 import dev.gitlive.firebase.auth.AuthCredential
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
-import io.github.aakira.napier.Napier
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * FirebaseAuthService class for handling Firebase authentication operations.
@@ -23,23 +24,18 @@ class FirebaseAuthService {
     /**
      * Retrieves the currently logged-in user.
      *
-     * @return The currently logged-in FirebaseUser, or null if no user is logged in.
+     * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
-    fun getCurrentUser(): FirebaseUser? {
-        return try {
-            Firebase.auth.currentUser
-        } catch (throwable: Throwable) {
-            Napier.e(throwable) { "Couldn't set Firebase auth" }
-            null
-        }
-    }
+    fun getCurrentUser(): Flow<FirebaseUser?> =
+        Firebase.auth.authStateChanged
 
     /**
      * Checks if a user is currently logged in.
      *
-     * @return True if a user is logged in, false otherwise.
+     * @return A Flow emitting a Boolean indicating whether a user is logged in.
      */
-    fun isUserLoggedIn() = getCurrentUser() != null
+    fun isUserLoggedIn(): Flow<Boolean> =
+        Firebase.auth.authStateChanged.map { it != null }
 
     /**
      * Signs in a user with the given authentication credentials.

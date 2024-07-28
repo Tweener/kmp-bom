@@ -2,6 +2,7 @@ package com.tweener.firebase.auth.provider
 
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import dev.gitlive.firebase.auth.FirebaseUser
+import kotlinx.coroutines.flow.Flow
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -38,16 +39,16 @@ abstract class FirebaseAuthProvider<SignInParams>(
     /**
      * Checks if a user is currently signed in.
      *
-     * @return True if a user is signed in, false otherwise.
+     * @return A Flow emitting a Boolean indicating whether a user is logged in.
      */
-    fun isUserSignedIn(): Boolean = firebaseAuthDataSource.isUserLoggedIn()
+    fun isUserSignedIn(): Flow<Boolean> = firebaseAuthDataSource.isUserLoggedIn()
 
     /**
      * Retrieves the currently signed-in user.
      *
      * @return The currently signed-in FirebaseUser, or null if no user is signed in.
      */
-    fun getCurrentUser(): FirebaseUser? = firebaseAuthDataSource.getCurrentUser()
+    fun getCurrentUser(): Flow<FirebaseUser?> = firebaseAuthDataSource.getCurrentUser()
 
     /**
      * Asserts the given [params] are not null or throws a [MissingSignInParamsException].
