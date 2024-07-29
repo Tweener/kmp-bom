@@ -7,7 +7,6 @@ import dev.gitlive.firebase.auth.AuthCredential
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 /**
  * FirebaseAuthService class for handling Firebase authentication operations.
@@ -28,14 +27,6 @@ class FirebaseAuthService {
      */
     fun getCurrentUser(): Flow<FirebaseUser?> =
         Firebase.auth.authStateChanged
-
-    /**
-     * Checks if a user is currently logged in.
-     *
-     * @return A Flow emitting a Boolean indicating whether a user is logged in.
-     */
-    fun isUserLoggedIn(): Flow<Boolean> =
-        Firebase.auth.authStateChanged.map { it != null }
 
     /**
      * Signs in a user with the given authentication credentials.

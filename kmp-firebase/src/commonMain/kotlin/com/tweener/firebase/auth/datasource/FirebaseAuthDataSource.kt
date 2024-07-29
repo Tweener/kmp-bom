@@ -4,6 +4,7 @@ import com.tweener.firebase.auth.FirebaseAuthService
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * FirebaseAuthDataSource class for handling communication with [FirebaseAuthService].
@@ -84,20 +85,20 @@ class FirebaseAuthDataSource(
     }
 
     /**
-     * Checks if a user is currently logged in.
-     *
-     * @return A Flow emitting a Boolean indicating whether a user is logged in.
-     */
-    fun isUserLoggedIn(): Flow<Boolean> =
-        firebaseAuthService.isUserLoggedIn()
-
-    /**
      * Retrieves the currently logged-in user.
      *
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
     fun getCurrentUser(): Flow<FirebaseUser?> =
         firebaseAuthService.getCurrentUser()
+
+    /**
+     * Checks if a user is currently logged in.
+     *
+     * @return A Flow emitting a Boolean indicating whether a user is logged in.
+     */
+    fun isUserLoggedIn(): Flow<Boolean> =
+        getCurrentUser().map { it != null }
 
     /**
      * Signs out the currently logged-in user.
