@@ -90,7 +90,7 @@ kotlin {
             api(libs.kotlin.coroutines.core)
 
             // Firebase
-            implementation(libs.firebase.firestore)
+            api(libs.firebase.firestore)
             implementation(libs.firebase.config)
             api(libs.firebase.auth)
             implementation(libs.firebase.functions)
