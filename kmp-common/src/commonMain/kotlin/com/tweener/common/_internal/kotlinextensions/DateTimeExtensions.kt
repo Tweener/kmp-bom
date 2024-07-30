@@ -32,4 +32,8 @@ fun LocalDate.toEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSystemDef
     return this.atTime(hour = timeNow.hour, minute = timeNow.minute).toInstant(timeZone = timeZone).toEpochMilliseconds()
 }
 
+fun LocalDateTime.toEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSystemDefault()): Long {
+    return this.toInstant(timeZone = timeZone).toEpochMilliseconds()
+}
+
 fun Long.fromEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSystemDefault()) = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
