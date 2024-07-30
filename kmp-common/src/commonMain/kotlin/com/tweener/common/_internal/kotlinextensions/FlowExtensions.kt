@@ -1,9 +1,13 @@
 package com.tweener.common._internal.kotlinextensions
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
 /**
  * @author Vivien Mahe
@@ -49,3 +53,44 @@ fun <T, R> Flow<T>.conditional(
             ifFalse()
         }
     }
+
+/**
+ * An extension function for CoroutineScope that runs an initialization block and returns a StateFlow.
+ *
+ * The provided block is executed immediately when this function is called. After executing the block,
+ * the function emits a Unit value into a StateFlow. The StateFlow is eagerly started, meaning the block
+ * is executed and the initial value is set as soon as the StateFlow is created, regardless of whether
+ * there are any collectors.
+ *
+ * @param block A lambda function that takes no arguments and returns Unit. This block is executed immediately.
+ * @return A StateFlow that emits Unit after the block is executed. The initial value of the StateFlow is Unit.
+ *
+ * ```
+ * import kotlinx.coroutines.*
+ * import kotlinx.coroutines.flow.*
+ *
+ * fun CoroutineScope.onInit(block: () -> Unit) = flow {
+ *     block()
+ *     emit(Unit)
+ * }.stateIn(scope = this, started = SharingStarted.Eagerly, initialValue = Unit)
+ *
+ * fun main() = runBlocking {
+ *     // Define a CoroutineScope
+ *     val scope = this
+ *
+ *     // Use the onInit extension function
+ *     val stateFlow = scope.onInit {
+ *         println("Initialization block executed")
+ *     }
+ *
+ *     // Collect from the stateFlow
+ *     stateFlow.collect {
+ *         println("StateFlow emitted: $it")
+ *     }
+ * }
+ * ```
+ */
+fun CoroutineScope.onInit(block: () -> Unit) = flow {
+    block()
+    emit(Unit)
+}.stateIn(scope = this, started = SharingStarted.Eagerly, initialValue = Unit)
