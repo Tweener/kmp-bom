@@ -7,6 +7,13 @@ object MavenPublishing {
 
     const val group = "io.github.tweener"
 
+    object Repository {
+        object Maven {
+            const val name = "OSSRH"
+            const val url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2"
+        }
+    }
+
     object Developer {
         const val id = "Tweener"
         const val name = "Vivien Mahé"

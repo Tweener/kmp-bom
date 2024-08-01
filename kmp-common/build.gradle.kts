@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -116,6 +117,17 @@ group = MavenPublishing.group
 version = BomConfiguration.Libraries.Common.version
 
 publishing {
+    repositories {
+        maven {
+            name = MavenPublishing.Repository.Maven.name
+            url = uri(MavenPublishing.Repository.Maven.url)
+            credentials {
+                username = gradleLocalProperties(rootDir).getProperty("sonatype.token.username") ?: System.getenv("OSSRH_USER_TOKEN_USERNAME")
+                password = gradleLocalProperties(rootDir).getProperty("sonatype.token.username") ?: System.getenv("OSSRH_USER_TOKEN_PASSWORD")
+            }
+        }
+    }
+
     publications {
         publications.withType<MavenPublication> {
             artifact(javadocJar)

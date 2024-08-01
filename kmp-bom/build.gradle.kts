@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.bom.generator)
     id("signing")
@@ -13,6 +15,17 @@ bomGenerator {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = MavenPublishing.Repository.Maven.name
+            url = uri(MavenPublishing.Repository.Maven.url)
+            credentials {
+                username = gradleLocalProperties(rootDir).getProperty("sonatype.token.username") ?: System.getenv("OSSRH_USER_TOKEN_USERNAME")
+                password = gradleLocalProperties(rootDir).getProperty("sonatype.token.username") ?: System.getenv("OSSRH_USER_TOKEN_PASSWORD")
+            }
+        }
+    }
+
     publications {
         create<MavenPublication>("Bom") {
             artifactId = BomConfiguration.artifactId
