@@ -44,11 +44,18 @@ abstract class FirebaseAuthProvider<SignInParams>(
     fun isUserSignedIn(): Flow<Boolean> = firebaseAuthDataSource.isUserLoggedIn()
 
     /**
+     * Returns the currently signed-in Firebase user, or null if no user is signed in.
+     *
+     * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
+     */
+    fun getCurrentUser(): FirebaseUser? = firebaseAuthDataSource.getCurrentUser()
+
+    /**
      * Retrieves the currently signed-in user.
      *
      * @return The currently signed-in FirebaseUser, or null if no user is signed in.
      */
-    fun getCurrentUser(): Flow<FirebaseUser?> = firebaseAuthDataSource.getCurrentUser()
+    fun getCurrentUserAsFlow(): Flow<FirebaseUser?> = firebaseAuthDataSource.getCurrentUserAsFlow()
 
     /**
      * Asserts the given [params] are not null or throws a [MissingSignInParamsException].

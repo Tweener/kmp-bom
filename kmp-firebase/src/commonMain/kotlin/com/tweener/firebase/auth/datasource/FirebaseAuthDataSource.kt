@@ -85,12 +85,20 @@ class FirebaseAuthDataSource(
     }
 
     /**
+     * Returns the currently signed-in Firebase user, or null if no user is signed in.
+     *
+     * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
+     */
+    fun getCurrentUser(): FirebaseUser? =
+        firebaseAuthService.getCurrentUser()
+
+    /**
      * Retrieves the currently logged-in user.
      *
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
-    fun getCurrentUser(): Flow<FirebaseUser?> =
-        firebaseAuthService.getCurrentUser()
+    fun getCurrentUserAsFlow(): Flow<FirebaseUser?> =
+        firebaseAuthService.getCurrentUserAsFlow()
 
     /**
      * Checks if a user is currently logged in.
@@ -98,7 +106,7 @@ class FirebaseAuthDataSource(
      * @return A Flow emitting a Boolean indicating whether a user is logged in.
      */
     fun isUserLoggedIn(): Flow<Boolean> =
-        getCurrentUser().map { it != null }
+        getCurrentUserAsFlow().map { it != null }
 
     /**
      * Signs out the currently logged-in user.

@@ -21,11 +21,19 @@ import kotlinx.coroutines.flow.Flow
 class FirebaseAuthService {
 
     /**
+     * Returns the currently signed-in Firebase user, or null if no user is signed in.
+     *
+     * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
+     */
+    fun getCurrentUser(): FirebaseUser? =
+        Firebase.auth.currentUser
+
+    /**
      * Retrieves the currently logged-in user.
      *
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
-    fun getCurrentUser(): Flow<FirebaseUser?> =
+    fun getCurrentUserAsFlow(): Flow<FirebaseUser?> =
         Firebase.auth.authStateChanged
 
     /**
