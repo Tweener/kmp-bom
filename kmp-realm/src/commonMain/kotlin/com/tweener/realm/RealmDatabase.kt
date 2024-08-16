@@ -68,4 +68,10 @@ class RealmDatabase(
             delete(all)
         }
     }
+
+    fun clear() {
+        realm.writeBlocking {
+            deleteAll()
+        }
+    }
 }
