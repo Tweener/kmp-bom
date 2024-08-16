@@ -43,14 +43,14 @@ import kotlinx.coroutines.flow.stateIn
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T, R> Flow<T>.conditional(
     condition: (T) -> Boolean,
-    ifTrue: suspend () -> Flow<R>,
-    ifFalse: suspend () -> Flow<R> = { emptyFlow() },
+    ifTrue: suspend (T) -> Flow<R>,
+    ifFalse: suspend (T) -> Flow<R> = { emptyFlow() },
 ): Flow<R> =
     this.flatMapLatest { value ->
         if (condition(value)) {
-            ifTrue()
+            ifTrue(value)
         } else {
-            ifFalse()
+            ifFalse(value)
         }
     }
 
