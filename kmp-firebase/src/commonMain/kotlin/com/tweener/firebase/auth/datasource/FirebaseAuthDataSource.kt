@@ -1,6 +1,7 @@
 package com.tweener.firebase.auth.datasource
 
 import com.tweener.firebase.auth.FirebaseAuthService
+import dev.gitlive.firebase.auth.EmailAuthProvider
 import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,7 @@ class FirebaseAuthDataSource(
 ) {
 
     /**
-     * Authenticates a user with a Google ID token.
+     * Authenticates a user with Google credentials.
      *
      * @param idToken The Google ID token used for authentication.
      * @return The authenticated FirebaseUser, or null if authentication fails.
@@ -36,7 +37,7 @@ class FirebaseAuthDataSource(
     /**
      * Authenticates a user with an email and password.
      *
-     * @param email The email used for authentication.
+     * @param email The email address used for authentication.
      * @param password The password used for authentication.
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
@@ -52,6 +53,27 @@ class FirebaseAuthDataSource(
      */
     suspend fun createUserWithEmailAndPassword(email: String, password: String): FirebaseUser? =
         firebaseAuthService.createUserWithEmailAndPassword(email = email, password = password)
+
+    /**
+     * Reauthenticates the currently logged-in user using Google credentials.
+     *
+     * @param idToken The Google ID token used for reauthentication.
+     */
+    suspend fun reauthenticateWithGoogle(idToken: String) {
+        val firebaseCredential = GoogleAuthProvider.credential(idToken = idToken, accessToken = null)
+        firebaseAuthService.reauthenticateUser(credential = firebaseCredential)
+    }
+
+    /**
+     * Reauthenticates the currently logged-in user using email and password credentials.
+     *
+     * @param email The email address used for reauthentication.
+     * @param password The password used for reauthentication.
+     */
+    suspend fun reauthenticateWithEmailAndPassword(email: String, password: String) {
+        val firebaseCredential = EmailAuthProvider.credential(email = email, password = password)
+        firebaseAuthService.reauthenticateUser(credential = firebaseCredential)
+    }
 
     /**
      * Sends a password reset email with specified settings.
@@ -113,5 +135,12 @@ class FirebaseAuthDataSource(
      */
     suspend fun signOut() {
         firebaseAuthService.signOut()
+    }
+
+    /**
+     * Deletes the currently logged-in user.
+     */
+    suspend fun deleteCurrentUser() {
+        firebaseAuthService.deleteCurrentUser()
     }
 }

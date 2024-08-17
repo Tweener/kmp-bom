@@ -47,7 +47,7 @@ class FirebaseGoogleAuthProviderIos(
     }
 
     @OptIn(ExperimentalForeignApi::class)
-    private suspend fun retrieveIdToken() = suspendCoroutine<Result<String?>> { continuation ->
+    private suspend fun retrieveIdToken() = suspendCoroutine<Result<String>> { continuation ->
         UIApplication.sharedApplication.keyWindow?.rootViewController
             ?.let { rootViewController ->
                 GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { gidSignInResult, nsError ->

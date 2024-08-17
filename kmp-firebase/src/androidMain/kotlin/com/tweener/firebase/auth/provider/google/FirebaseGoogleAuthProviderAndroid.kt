@@ -34,6 +34,7 @@ class FirebaseGoogleAuthProviderAndroid(
     serverClientId: String,
     private val context: Context,
     private val filterByAuthorizedAccounts: Boolean = false,
+    private val autoSelectEnabled: Boolean = true,
 ) : FirebaseGoogleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource, serverClientId = serverClientId) {
 
     private val credentialManager = CredentialManager.create(context)
@@ -43,7 +44,7 @@ class FirebaseGoogleAuthProviderAndroid(
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(filterByAuthorizedAccounts)
                 .setServerClientId(serverClientId)
-                .setAutoSelectEnabled(true)
+                .setAutoSelectEnabled(autoSelectEnabled)
                 .build()
 
             val request: GetCredentialRequest = GetCredentialRequest.Builder()

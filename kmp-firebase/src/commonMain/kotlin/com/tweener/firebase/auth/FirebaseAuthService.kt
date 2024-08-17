@@ -66,6 +66,15 @@ class FirebaseAuthService {
         Firebase.auth.signInWithEmailAndPassword(email = email, password = password).user
 
     /**
+     * Reauthenticates the currently logged-in user with the provided credentials.
+     *
+     * @param credential The authentication credential used for reauthentication.
+     */
+    suspend fun reauthenticateUser(credential: AuthCredential) {
+        getCurrentUser()?.reauthenticate(credential = credential)
+    }
+
+    /**
      * Sends a password reset email with specified settings.
      *
      * @param email The email address to send the password reset email to.
@@ -100,5 +109,14 @@ class FirebaseAuthService {
      */
     suspend fun signOut() {
         Firebase.auth.signOut()
+    }
+
+    /**
+     * Deletes the currently logged-in user.
+     *
+     * Deletes the currently logged-in user from Firebase Authentication. If no user is logged in, the method does nothing.
+     */
+    suspend fun deleteCurrentUser() {
+        getCurrentUser()?.delete()
     }
 }
