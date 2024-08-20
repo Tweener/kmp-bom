@@ -42,9 +42,21 @@ class RealmDatabase(
             copyToRealm(instance, updatePolicy = UpdatePolicy.ALL)
         }
 
-    inline fun <reified T : RealmObject> deleteById(id: String) {
+    inline fun <reified T : RealmObject> deleteByRealmUuid(uuid: String) {
         realm.writeBlocking {
-            findByRealmUuid<T>(uuid = id)?.let { instance ->
+            findByRealmUuid<T>(uuid = uuid)?.let { instance ->
+                // To make sure to use the latest version of the frozen object, we need to use "findLatest"
+                // See doc: https://www.mongodb.com/docs/realm/sdk/kotlin/realm-database/frozen-arch/#access-a-live-version-of-frozen-object
+                findLatest(instance)?.also {
+                    delete(it)
+                }
+            }
+        }
+    }
+
+    inline fun <reified T : RealmObject> deleteByProperty(propertyName: String, propertyValue: Any) {
+        realm.writeBlocking {
+            findByProperty<T>(propertyName = propertyName, propertyValue = propertyValue)?.let { instance ->
                 // To make sure to use the latest version of the frozen object, we need to use "findLatest"
                 // See doc: https://www.mongodb.com/docs/realm/sdk/kotlin/realm-database/frozen-arch/#access-a-live-version-of-frozen-object
                 findLatest(instance)?.also {
