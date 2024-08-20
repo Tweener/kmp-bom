@@ -29,8 +29,8 @@ class FirebaseAuthDataSource(
      * @param idToken The Google ID token used for authentication.
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
-    suspend fun authenticateWithGoogleIdToken(idToken: String): FirebaseUser? {
-        val firebaseCredential = GoogleAuthProvider.credential(idToken = idToken, accessToken = null)
+    suspend fun authenticateWithGoogleIdToken(idToken: String, accessToken: String? = null): FirebaseUser? {
+        val firebaseCredential = GoogleAuthProvider.credential(idToken = idToken, accessToken = accessToken)
         return firebaseAuthService.signIn(credential = firebaseCredential)
     }
 

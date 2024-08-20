@@ -1,6 +1,7 @@
 package com.tweener.firebase.auth.provider.google
 
 import cocoapods.GoogleSignIn.GIDSignIn
+import com.tweener.common._internal.safeLet
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
@@ -32,14 +33,13 @@ class FirebaseGoogleAuthProviderIos(
     override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
         try {
             retrieveIdToken()
-                .getOrNull()
-                ?.let { idToken ->
+                .onSuccess { tokens ->
                     firebaseAuthDataSource
-                        .authenticateWithGoogleIdToken(idToken = idToken)
+                        .authenticateWithGoogleIdToken(idToken = tokens.idToken, accessToken = tokens.accessToken)
                         ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
                         ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
                 }
-                ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
+                .onFailure { onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE))) }
         } catch (throwable: Throwable) {
             Napier.e(throwable) { "Couldn't sign in the user." }
             onResponse(Result.failure(throwable))
@@ -47,20 +47,28 @@ class FirebaseGoogleAuthProviderIos(
     }
 
     @OptIn(ExperimentalForeignApi::class)
-    private suspend fun retrieveIdToken() = suspendCoroutine<Result<String>> { continuation ->
+    private suspend fun retrieveIdToken() = suspendCoroutine<Result<GoogleTokens>> { continuation ->
         UIApplication.sharedApplication.keyWindow?.rootViewController
             ?.let { rootViewController ->
                 GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { gidSignInResult, nsError ->
+                    nsError?.let { Napier.e { "Couldn't sign in with Google on iOS! $nsError" } }
+
                     when {
                         nsError != null -> continuation.resume(Result.failure(GoogleAuthProviderException()))
 
                         else -> {
-                            gidSignInResult?.user?.idToken?.tokenString
-                                ?.let { idToken -> continuation.resume(Result.success(idToken)) }
-                                ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
+                            safeLet(gidSignInResult?.user?.idToken?.tokenString, gidSignInResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
+                                continuation.resume(Result.success(GoogleTokens(idToken = idToken, accessToken = accessToken)))
+                            } ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
                         }
                     }
                 }
             }
+            ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
     }
 }
+
+data class GoogleTokens(
+    val idToken: String,
+    val accessToken: String,
+)
