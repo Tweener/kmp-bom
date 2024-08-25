@@ -5,6 +5,7 @@ import dev.gitlive.firebase.remoteconfig.FirebaseRemoteConfig
 import dev.gitlive.firebase.remoteconfig.get
 import dev.gitlive.firebase.remoteconfig.remoteConfig
 import io.github.aakira.napier.Napier
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * @author Vivien Mahe
@@ -20,7 +21,7 @@ class RemoteConfigService(
                 if (isDebug) {
                     // Force refresh to 10 seconds when in Debug
                     settings {
-                        minimumFetchIntervalInSeconds = 10
+                        minimumFetchInterval = 10.seconds
                     }
                 }
             }

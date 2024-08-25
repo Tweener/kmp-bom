@@ -50,14 +50,14 @@ class FirebaseGoogleAuthProviderIos(
     private suspend fun retrieveIdToken() = suspendCoroutine<Result<GoogleTokens>> { continuation ->
         UIApplication.sharedApplication.keyWindow?.rootViewController
             ?.let { rootViewController ->
-                GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { gidSignInResult, nsError ->
-                    nsError?.let { Napier.e { "Couldn't sign in with Google on iOS! $nsError" } }
+                GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { authResult, error ->
+                    error?.let { Napier.e { "Couldn't sign in with Google on iOS! $error" } }
 
                     when {
-                        nsError != null -> continuation.resume(Result.failure(GoogleAuthProviderException()))
+                        error != null -> continuation.resume(Result.failure(GoogleAuthProviderException()))
 
                         else -> {
-                            safeLet(gidSignInResult?.user?.idToken?.tokenString, gidSignInResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
+                            safeLet(authResult?.user?.idToken?.tokenString, authResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
                                 continuation.resume(Result.success(GoogleTokens(idToken = idToken, accessToken = accessToken)))
                             } ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
                         }

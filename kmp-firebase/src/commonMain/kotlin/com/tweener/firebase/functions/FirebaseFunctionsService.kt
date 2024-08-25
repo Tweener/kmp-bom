@@ -4,6 +4,7 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.functions.FirebaseFunctions
 import dev.gitlive.firebase.functions.functions
 import io.github.aakira.napier.Napier
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * @author Vivien Mahe
@@ -12,7 +13,7 @@ import io.github.aakira.napier.Napier
 class FirebaseFunctionsService {
 
     companion object {
-        const val TIMEOUT = 30000L
+        val TIMEOUT = 30.seconds
     }
 
     fun getFunctions(): FirebaseFunctions? =

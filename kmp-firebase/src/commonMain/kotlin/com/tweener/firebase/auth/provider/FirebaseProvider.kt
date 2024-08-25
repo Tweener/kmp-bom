@@ -6,5 +6,6 @@ package com.tweener.firebase.auth.provider
  */
 enum class FirebaseProvider {
     GOOGLE,
-    EMAIL
+    EMAIL,
+    APPLE,
 }
