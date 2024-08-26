@@ -54,17 +54,17 @@ class FirebaseGoogleAuthProviderIos(
                     error?.let { Napier.e { "Couldn't sign in with Google on iOS! $error" } }
 
                     when {
-                        error != null -> continuation.resume(Result.failure(GoogleAuthProviderException()))
+                        error != null -> continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
 
                         else -> {
                             safeLet(authResult?.user?.idToken?.tokenString, authResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
                                 continuation.resume(Result.success(GoogleTokens(idToken = idToken, accessToken = accessToken)))
-                            } ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
+                            } ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
                         }
                     }
                 }
             }
-            ?: continuation.resume(Result.failure(GoogleAuthProviderException()))
+            ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
     }
 }
 

@@ -21,9 +21,9 @@ import io.github.aakira.napier.Napier
  */
 class FirebaseEmailAuthProvider(
     firebaseAuthDataSource: FirebaseAuthDataSource,
-) : FirebaseAuthProvider<EmailAuthParams>(firebaseAuthDataSource = firebaseAuthDataSource) {
+) : FirebaseAuthProvider<FirebaseEmailAuthParams>(firebaseAuthDataSource = firebaseAuthDataSource) {
 
-    override suspend fun signIn(params: EmailAuthParams?, onResponse: (Result<FirebaseUser>) -> Unit) {
+    override suspend fun signIn(params: FirebaseEmailAuthParams?, onResponse: (Result<FirebaseUser>) -> Unit) {
         try {
             assertSignInParamsNotNull(params)
 
@@ -43,7 +43,7 @@ class FirebaseEmailAuthProvider(
      * @param params The email and password required for sign-up, encapsulated in an EmailAuthParams object.
      * @param onResponse Callback to handle the result of the sign-up process. It returns a Result object containing a FirebaseUser on success, or an exception on failure.
      */
-    suspend fun signUp(params: EmailAuthParams, onResponse: (Result<FirebaseUser>) -> Unit) {
+    suspend fun signUp(params: FirebaseEmailAuthParams, onResponse: (Result<FirebaseUser>) -> Unit) {
         try {
             firebaseAuthDataSource
                 .createUserWithEmailAndPassword(email = params.email, password = params.password)

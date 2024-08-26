@@ -84,14 +84,14 @@ class FirebaseGoogleAuthProviderAndroid(
 
                     else -> {
                         Napier.d { "Unexpected type of credential" }
-                        onResponse(Result.failure(GoogleAuthProviderUnknownCredentialException()))
+                        onResponse(Result.failure(FirebaseGoogleAuthProviderUnknownCredentialException()))
                     }
                 }
             }
 
             else -> {
                 Napier.d { "Unexpected type of credential" }
-                onResponse(Result.failure(GoogleAuthProviderUnknownCredentialException()))
+                onResponse(Result.failure(FirebaseGoogleAuthProviderUnknownCredentialException()))
             }
         }
     }

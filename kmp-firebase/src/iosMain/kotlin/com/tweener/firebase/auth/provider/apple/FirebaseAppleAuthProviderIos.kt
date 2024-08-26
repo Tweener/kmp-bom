@@ -52,7 +52,6 @@ class FirebaseAppleAuthProviderIos(
                 delegate = this@FirebaseAppleAuthProviderIos.delegate
                 presentationContextProvider = this@FirebaseAppleAuthProviderIos.presentationContextProvider
                 performRequests()
-                Napier.d { "performRequests() called" }
             }
         } catch (throwable: Throwable) {
             Napier.e(throwable) { "An error occurred while signing in with Apple provider" }
@@ -70,14 +69,13 @@ private class AuthorizationControllerDelegate(
     @OptIn(BetaInteropApi::class, ExperimentalForeignApi::class)
     override fun authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization: ASAuthorization) {
         try {
-            Napier.d { "AppleSignIn: authorizationController success function is called" }
             val appleIDCredential = didCompleteWithAuthorization.credential as ASAuthorizationAppleIDCredential
 
             val appleIDToken = appleIDCredential.identityToken
-            requireNotNullOrThrow(appleIDToken) { AppleAuthProviderException(message = "Unable to fetch identity token") }
+            requireNotNullOrThrow(appleIDToken) { FirebaseAppleAuthProviderException(message = "Unable to fetch identity token") }
 
             val idTokenString = NSString.create(data = appleIDToken, encoding = NSUTF8StringEncoding)?.toString()
-            requireNotNullOrThrow(idTokenString) { AppleAuthProviderException(message = "Unable to serialize token string from data: ${appleIDToken.debugDescription}") }
+            requireNotNullOrThrow(idTokenString) { FirebaseAppleAuthProviderException(message = "Unable to serialize token string from data: ${appleIDToken.debugDescription}") }
 
             val credential = FIROAuthProvider.appleCredentialWithIDToken(IDToken = idTokenString, rawNonce = nonce, fullName = appleIDCredential.fullName)
 
@@ -85,7 +83,7 @@ private class AuthorizationControllerDelegate(
                 error?.let { Napier.e { "Couldn't sign in with Apple on iOS! $error" } }
 
                 when {
-                    error != null || authResult == null -> onResponse(Result.failure(AppleAuthProviderException(message = "FIRAuthDataResult is null")))
+                    error != null || authResult == null -> onResponse(Result.failure(FirebaseAppleAuthProviderException(message = "FIRAuthDataResult is null")))
 
                     else -> {
                         firebaseAuthDataSource.getCurrentUser()
@@ -101,7 +99,7 @@ private class AuthorizationControllerDelegate(
 
     override fun authorizationController(controller: ASAuthorizationController, didCompleteWithError: NSError) {
         Napier.e { "Didn't get authorization to sign in with Apple: $didCompleteWithError" }
-        onResponse(Result.failure(AppleAuthProviderException(message = didCompleteWithError.localizedFailureReason)))
+        onResponse(Result.failure(FirebaseAppleAuthProviderException(message = didCompleteWithError.localizedFailureReason)))
     }
 }
 
