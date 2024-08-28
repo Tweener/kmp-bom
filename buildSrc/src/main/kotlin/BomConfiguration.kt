@@ -15,19 +15,19 @@ object BomConfiguration {
 
         object Common {
             const val packageName = "com.tweener.common"
-            const val version = "1.0.7"
+            const val version = "1.0.8"
             const val namespace = "$packageName.android"
         }
 
         object Firebase {
             const val packageName = "com.tweener.firebase"
-            const val version = "1.0.5"
+            const val version = "1.0.6"
             const val namespace = "$packageName.android"
         }
 
         object Realm {
             const val packageName = "com.tweener.realm"
-            const val version = "2.0.2"
+            const val version = "2.0.3"
             const val namespace = "$packageName.android"
         }
     }
