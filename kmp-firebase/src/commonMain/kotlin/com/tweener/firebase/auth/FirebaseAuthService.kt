@@ -1,12 +1,13 @@
 package com.tweener.firebase.auth
 
+import com.tweener.firebase.auth.mapper.toTweenerFirebaseUser
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.ActionCodeSettings
 import dev.gitlive.firebase.auth.AndroidPackageName
 import dev.gitlive.firebase.auth.AuthCredential
-import dev.gitlive.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * FirebaseAuthService class for handling Firebase authentication operations.
@@ -26,7 +27,7 @@ class FirebaseAuthService {
      * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
      */
     fun getCurrentUser(): FirebaseUser? =
-        Firebase.auth.currentUser
+        Firebase.auth.currentUser?.toTweenerFirebaseUser()
 
     /**
      * Retrieves the currently logged-in user.
@@ -34,7 +35,7 @@ class FirebaseAuthService {
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
     fun getCurrentUserAsFlow(): Flow<FirebaseUser?> =
-        Firebase.auth.authStateChanged
+        Firebase.auth.authStateChanged.map { it?.toTweenerFirebaseUser() }
 
     /**
      * Signs in a user with the given authentication credentials.
@@ -43,7 +44,7 @@ class FirebaseAuthService {
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
     suspend fun signIn(credential: AuthCredential): FirebaseUser? =
-        Firebase.auth.signInWithCredential(authCredential = credential).user
+        Firebase.auth.signInWithCredential(authCredential = credential).user?.toTweenerFirebaseUser()
 
     /**
      * Creates a new user with the given email and password.
@@ -53,7 +54,7 @@ class FirebaseAuthService {
      * @return The created FirebaseUser, or null if creation fails.
      */
     suspend fun createUserWithEmailAndPassword(email: String, password: String): FirebaseUser? =
-        Firebase.auth.createUserWithEmailAndPassword(email = email, password = password).user
+        Firebase.auth.createUserWithEmailAndPassword(email = email, password = password).user?.toTweenerFirebaseUser()
 
     /**
      * Signs in a user with the given email and password.
@@ -63,7 +64,7 @@ class FirebaseAuthService {
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
     suspend fun signInWithEmailAndPassword(email: String, password: String): FirebaseUser? =
-        Firebase.auth.signInWithEmailAndPassword(email = email, password = password).user
+        Firebase.auth.signInWithEmailAndPassword(email = email, password = password).user?.toTweenerFirebaseUser()
 
     /**
      * Reauthenticates the currently logged-in user with the provided credentials.
@@ -71,7 +72,7 @@ class FirebaseAuthService {
      * @param credential The authentication credential used for reauthentication.
      */
     suspend fun reauthenticateUser(credential: AuthCredential) {
-        getCurrentUser()?.reauthenticate(credential = credential)
+        Firebase.auth.currentUser?.reauthenticate(credential = credential)
     }
 
     /**
@@ -117,6 +118,6 @@ class FirebaseAuthService {
      * Deletes the currently logged-in user from Firebase Authentication. If no user is logged in, the method does nothing.
      */
     suspend fun deleteCurrentUser() {
-        getCurrentUser()?.delete()
+        Firebase.auth.currentUser?.delete()
     }
 }

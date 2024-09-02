@@ -21,7 +21,7 @@ object BomConfiguration {
 
         object Firebase {
             const val packageName = "com.tweener.firebase"
-            const val version = "1.0.6"
+            const val version = "1.0.7"
             const val namespace = "$packageName.android"
         }
 

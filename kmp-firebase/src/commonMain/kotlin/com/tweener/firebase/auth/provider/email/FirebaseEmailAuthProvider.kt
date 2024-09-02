@@ -1,10 +1,10 @@
 package com.tweener.firebase.auth.provider.email
 
+import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import com.tweener.firebase.auth.provider.FirebaseAuthProvider
 import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
-import dev.gitlive.firebase.auth.FirebaseUser
 import io.github.aakira.napier.Napier
 
 /**

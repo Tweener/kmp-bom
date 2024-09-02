@@ -1,11 +1,11 @@
 package com.tweener.firebase.auth.provider.apple
 
 import com.tweener.firebase.auth.FirebaseAuthService
+import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import com.tweener.firebase.auth.provider.FirebaseAuthProviderNotImplementedException
 import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
-import dev.gitlive.firebase.auth.FirebaseUser
 
 /**
  * @author Vivien Mahe

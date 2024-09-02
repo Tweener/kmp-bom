@@ -2,7 +2,7 @@ package com.tweener.firebase.auth.datasource
 
 import com.tweener.firebase.auth.FirebaseAuthService
 import dev.gitlive.firebase.auth.EmailAuthProvider
-import dev.gitlive.firebase.auth.FirebaseUser
+import com.tweener.firebase.auth.FirebaseUser
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
