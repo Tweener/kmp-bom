@@ -37,6 +37,21 @@ class RealmDatabase(
     inline fun <reified T : TypedRealmObject> findByProperty(propertyName: String, propertyValue: Any): T? =
         realm.query<T>("$propertyName == $0", propertyValue).first().find()
 
+    inline fun <reified T : TypedRealmObject> findByProperties(properties: List<RealmQueryConstraint>): List<T> {
+        if (properties.isEmpty()) return emptyList()
+
+        val firstProperty = properties[0]
+
+        if (properties.size == 1) {
+            return realm.query<T>(firstProperty.query, firstProperty.value).find()
+        }
+
+        return realm
+            .query<T>(firstProperty.query, firstProperty.value)
+            .apply { for (i in 1..<properties.size) query(properties[i].query, properties[i].value) }
+            .find()
+    }
+
     inline fun <reified T : RealmObject> upsert(instance: T) =
         realm.writeBlocking {
             copyToRealm(instance, updatePolicy = UpdatePolicy.ALL)
