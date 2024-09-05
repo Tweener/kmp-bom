@@ -96,4 +96,21 @@ class FirebaseEmailAuthProvider(
                 canHandleCodeInApp = params.canHandleCodeInApp,
             )
         }
+
+    suspend fun sendSignInLinkToEmail(params: FirebaseEmailLinkParams): Result<Unit> =
+        suspendCatching {
+            firebaseAuthDataSource.sendSignInLinkToEmail(
+                email = params.email,
+                url = params.url,
+                iOSBundleId = params.iosParams?.iOSBundleId,
+                androidPackageName = params.androidParams?.androidPackageName,
+                installIfNotAvailable = params.androidParams?.installIfNotAvailable ?: true,
+                minimumVersion = params.androidParams?.minimumVersion,
+                canHandleCodeInApp = params.canHandleCodeInApp
+            )
+        }
+
+    suspend fun isSignInWithEmailLink(link: String): Boolean {
+        return firebaseAuthDataSource.isSignInWithEmailLink(link)
+    }
 }

@@ -177,4 +177,28 @@ class FirebaseAuthDataSource(
      * Updates the currently logged in user.
      */
     suspend fun updateCurrentUser(user: FirebaseUser) = updateCurrentUser(user.directUser)
+
+    suspend fun sendSignInLinkToEmail(
+        email: String,
+        url: String,
+        iOSBundleId: String? = null,
+        androidPackageName: String? = null,
+        installIfNotAvailable: Boolean = true,
+        minimumVersion: String? = null,
+        canHandleCodeInApp: Boolean = false,
+    ) {
+        firebaseAuthService.sendSignInLinkToEmail(
+            email = email,
+            url = url,
+            iOSBundleId = iOSBundleId,
+            androidPackageName = androidPackageName,
+            installIfNotAvailable = installIfNotAvailable,
+            minimumVersion = minimumVersion,
+            canHandleCodeInApp = canHandleCodeInApp
+        )
+    }
+
+    fun isSignInWithEmailLink(link: String): Boolean {
+        return firebaseAuthService.isSignInWithEmailLink(link)
+    }
 }

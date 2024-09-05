@@ -161,4 +161,27 @@ class FirebaseAuthService(
      * Updates the currently logged in user.
      */
     suspend fun updateCurrentUser(user: FirebaseUser) = updateCurrentUser(user.directUser)
+
+    suspend fun sendSignInLinkToEmail(
+        email: String,
+        url: String,
+        iOSBundleId: String? = null,
+        androidPackageName: String? = null,
+        installIfNotAvailable: Boolean = true,
+        minimumVersion: String? = null,
+        canHandleCodeInApp: Boolean = false,
+    ) {
+        val actionCodeSettings = ActionCodeSettings(
+            url = url,
+            androidPackageName = androidPackageName?.let { AndroidPackageName(packageName = it, installIfNotAvailable = installIfNotAvailable, minimumVersion = minimumVersion) },
+            iOSBundleId = iOSBundleId,
+            canHandleCodeInApp = canHandleCodeInApp,
+        )
+
+        auth.sendSignInLinkToEmail(email, actionCodeSettings)
+    }
+
+    fun isSignInWithEmailLink(link: String): Boolean {
+        return auth.isSignInWithEmailLink(link)
+    }
 }
