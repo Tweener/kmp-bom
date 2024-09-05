@@ -8,4 +8,5 @@ enum class FirebaseProvider {
     GOOGLE,
     EMAIL,
     APPLE,
+    GITHUB
 }

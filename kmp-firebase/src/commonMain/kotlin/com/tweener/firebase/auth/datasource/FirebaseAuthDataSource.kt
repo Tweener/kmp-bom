@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.map
  * @since 15/01/2024
  */
 class FirebaseAuthDataSource(
-    private val firebaseAuthService: FirebaseAuthService,
+    internal val firebaseAuthService: FirebaseAuthService,
 ) {
 
     /**

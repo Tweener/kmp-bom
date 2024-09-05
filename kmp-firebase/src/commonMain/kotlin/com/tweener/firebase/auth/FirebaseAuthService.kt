@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
  * @since 15/01/2024
  */
 class FirebaseAuthService(
-    private val auth: FirebaseAuth = Firebase.auth
+    internal val auth: FirebaseAuth = Firebase.auth
 ) {
 
     constructor(app: FirebaseApp) : this(Firebase.auth(app))
