@@ -2,10 +2,10 @@ package com.tweener.firebase.auth.provider.google
 
 import cocoapods.GoogleSignIn.GIDSignIn
 import com.tweener.common._internal.safeLet
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
 import dev.datlag.tooling.async.suspendCatching
 import io.github.aakira.napier.Napier
@@ -36,7 +36,7 @@ class FirebaseGoogleAuthProviderIos(
         firebaseAuthDataSource.authenticateWithGoogleIdToken(
             idToken = token.idToken,
             accessToken = token.accessToken
-        ) ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)
+        ) ?: throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Google)
     }
 
     @OptIn(ExperimentalForeignApi::class)
@@ -46,7 +46,7 @@ class FirebaseGoogleAuthProviderIos(
                 when {
                     error != null -> continuation.resume(
                         Result.failure(
-                            FirebaseGoogleAuthProviderException()
+                            FirebaseAuthException.Google.Unknown
                         )
                     )
 
@@ -62,13 +62,13 @@ class FirebaseGoogleAuthProviderIos(
                             )
                         } ?: continuation.resume(
                             Result.failure(
-                                FirebaseGoogleAuthProviderException()
+                                FirebaseAuthException.Google.Unknown
                             )
                         )
                     }
                 }
             }
-        } ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
+        } ?: continuation.resume(Result.failure(FirebaseAuthException.Google.Unknown))
     }
 
     data class GoogleTokens(

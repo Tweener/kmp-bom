@@ -1,12 +1,13 @@
 package com.tweener.firebase.auth.provider.github
 
 import com.google.android.gms.tasks.Task
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
 import dev.datlag.tooling.async.suspendCatching
+import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 import dev.gitlive.firebase.auth.OAuthProvider
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
@@ -14,6 +15,7 @@ import kotlin.coroutines.suspendCoroutine
 import com.google.firebase.auth.AuthResult as AndroidAuthResult
 import com.google.firebase.auth.FirebaseUser as AndroidFirebaseUser
 import com.google.firebase.auth.OAuthProvider as AndroidOAuthProvider
+import com.google.firebase.auth.FirebaseAuthUserCollisionException as AndroidCollisionException
 import dev.gitlive.firebase.auth.android
 
 class FirebaseGitHubAuthProviderAndroid(
@@ -45,25 +47,41 @@ class FirebaseGitHubAuthProviderAndroid(
         val auth = firebaseAuthDataSource.firebaseAuthService.auth.android
         val currentUser = firebaseAuthDataSource.currentUser?.directUser?.android
 
+        var collision: Boolean = false
+        var collisionEmail: String? = null
         val linkAuthResult = suspendCatching {
             currentUser?.startActivityForLinkWithProvider(
                 params,
                 oAuthProvider.accessAndroid()
-            )?.linkOrSignInUser(currentUser)?.getOrNull()
+            )?.linkOrSignInUser(currentUser)?.onFailure {
+                if (it is FirebaseAuthUserCollisionException || it is AndroidCollisionException) {
+                    collision = true
+                    it.email?.ifBlank { null }?.let { m -> collisionEmail = m }
+                }
+            }?.getOrNull()
         }.getOrNull()
 
         val authResult = linkAuthResult ?: suspendCatching {
             auth.startActivityForSignInWithProvider(
                 params,
                 oAuthProvider.accessAndroid()
-            ).linkOrSignInUser(currentUser).getOrNull()
+            ).linkOrSignInUser(currentUser).onFailure {
+                if (it is FirebaseAuthUserCollisionException || it is AndroidCollisionException) {
+                    collision = true
+                    it.email?.ifBlank { null }?.let { m -> collisionEmail = m }
+                }
+            }.getOrNull()
         }.getOrNull()
 
         authResult?.let {
             firebaseAuthDataSource.firebaseAuthService.auth.android.updateCurrentUser(it).await()
         }
 
-        firebaseAuthDataSource.currentUser ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GITHUB)
+        firebaseAuthDataSource.currentUser ?: if (collision) {
+            throw FirebaseAuthException.CollisionException(email = collisionEmail)
+        } else {
+            throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.GitHub)
+        }
     }
 
     private suspend fun Task<AndroidAuthResult?>.linkOrSignInUser(existing: AndroidFirebaseUser?): Result<AndroidFirebaseUser> = suspendCoroutine { continuation ->
@@ -78,7 +96,7 @@ class FirebaseGitHubAuthProviderAndroid(
                 }
             } else {
                 continuation.resume((it?.user ?: existing)?.let { u -> Result.success(u) } ?: Result.failure(
-                    FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GITHUB)
+                    FirebaseAuthException.UnknownUser(provider = FirebaseProvider.GitHub)
                 ))
             }
         }.addOnFailureListener {

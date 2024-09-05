@@ -9,12 +9,14 @@ import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
 import dev.datlag.tooling.async.suspendCatching
+import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException as AndroidCollisionException
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.delay
@@ -55,6 +57,8 @@ class FirebaseGoogleAuthProviderAndroid(
             .addCredentialOption(googleIdOption)
             .build()
 
+        var collision: Boolean = false
+        var collisionEmail: String? = null
         val result = suspendCatching {
             credentialManager.getCredential(context, request)
         }.onFailure {
@@ -62,10 +66,18 @@ class FirebaseGoogleAuthProviderAndroid(
             if (it is NoCredentialException && params.retry >= 1) {
                 delay(params.delay)
                 return@suspendCatching signIn(params.copy(retry = params.retry - 1)).getOrThrow()
+            } else if (it is FirebaseAuthUserCollisionException || it is AndroidCollisionException) {
+                collision = true
+                it.email?.ifBlank { null }?.let { m -> collisionEmail = m }
             }
         }
 
-        handleSignInResponse(result.getOrThrow()).getOrThrow()
+        val signInResult = handleSignInResponse(result.getOrThrow())
+        signInResult.getOrNull() ?: firebaseAuthDataSource.currentUser ?: if (collision) {
+            throw FirebaseAuthException.CollisionException(collisionEmail)
+        } else {
+            signInResult.getOrThrow()
+        }
     }
 
     private suspend fun handleSignInResponse(result: GetCredentialResponse): Result<FirebaseUser> = suspendCatching {
@@ -92,13 +104,13 @@ class FirebaseGoogleAuthProviderAndroid(
                             firebaseAuthDataSource.updateCurrentUser(it)
                         }
 
-                        authResult ?: firebaseAuthDataSource.currentUser ?: throw FirebaseGoogleAuthProviderUnknownCredentialException()
+                        authResult ?: firebaseAuthDataSource.currentUser ?: throw FirebaseAuthException.UnknownUser(FirebaseProvider.Google)
                     }
 
-                    else -> throw FirebaseGoogleAuthProviderUnknownCredentialException()
+                    else -> throw FirebaseAuthException.Google.UnknownCredential
                 }
             }
-            else -> throw FirebaseGoogleAuthProviderUnknownCredentialException()
+            else -> throw FirebaseAuthException.Google.UnknownCredential
         }
     }
 }

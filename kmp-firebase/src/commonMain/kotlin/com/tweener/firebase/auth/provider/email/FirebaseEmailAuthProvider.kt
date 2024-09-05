@@ -1,13 +1,13 @@
 package com.tweener.firebase.auth.provider.email
 
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
 import com.tweener.firebase.auth.provider.FirebaseAuthProvider
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
 import dev.datlag.tooling.async.suspendCatching
 import dev.gitlive.firebase.auth.EmailAuthProvider
-import io.github.aakira.napier.Napier
+import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 
 /**
  * FirebaseEmailAuthProvider class for handling authentication with Firebase via email.
@@ -41,7 +41,7 @@ class FirebaseEmailAuthProvider(
 
         signInAuthResult
             ?: firebaseAuthDataSource.currentUser
-            ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.EMAIL)
+            ?: throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Email)
     }
 
     /**
@@ -66,7 +66,7 @@ class FirebaseEmailAuthProvider(
 
         signUpAuthResult
             ?: firebaseAuthDataSource.currentUser
-            ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.EMAIL)
+            ?: throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Email)
     }
 
     /**
