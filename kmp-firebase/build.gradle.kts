@@ -88,6 +88,7 @@ kotlin {
 
             // Coroutines
             api(libs.kotlin.coroutines.core)
+            implementation(libs.tooling.async)
 
             // Firebase
             api(libs.firebase.firestore)
