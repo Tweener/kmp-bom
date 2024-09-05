@@ -6,7 +6,6 @@ import dev.gitlive.firebase.app
 import dev.gitlive.firebase.auth.ActionCodeSettings
 import dev.gitlive.firebase.auth.AndroidPackageName
 import dev.gitlive.firebase.auth.AuthCredential
-import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,17 +21,15 @@ import kotlinx.coroutines.flow.map
  * @since 15/01/2024
  */
 class FirebaseAuthService(
-    internal val auth: FirebaseAuth = Firebase.auth
+    internal val app: FirebaseApp = Firebase.app
 ) {
-
-    constructor(app: FirebaseApp) : this(Firebase.auth(app))
 
     /**
      * Retrieves the currently logged-in user.
      *
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
-    val user: Flow<FirebaseUser?> = auth.authStateChanged.map { it?.let(::FirebaseUser) }
+    val user: Flow<FirebaseUser?> = Firebase.auth(app).authStateChanged.map { it?.let(::FirebaseUser) }
 
     /**
      * Returns the currently signed-in Firebase user, or null if no user is signed in.
@@ -40,7 +37,7 @@ class FirebaseAuthService(
      * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
      */
     val currentUser: FirebaseUser?
-        get() = auth.currentUser?.let(::FirebaseUser)
+        get() = Firebase.auth(app).currentUser?.let(::FirebaseUser)
 
     /**
      * Returns the currently signed-in Firebase user, or null if no user is signed in.
@@ -73,7 +70,7 @@ class FirebaseAuthService(
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
     suspend fun signIn(credential: AuthCredential): FirebaseUser? =
-        auth.signInWithCredential(authCredential = credential).user?.let(::FirebaseUser)
+        Firebase.auth(app).signInWithCredential(authCredential = credential).user?.let(::FirebaseUser)
 
     /**
      * Creates a new user with the given email and password.
@@ -83,7 +80,7 @@ class FirebaseAuthService(
      * @return The created FirebaseUser, or null if creation fails.
      */
     suspend fun createUserWithEmailAndPassword(email: String, password: String): FirebaseUser? =
-        auth.createUserWithEmailAndPassword(email = email, password = password).user?.let(::FirebaseUser)
+        Firebase.auth(app).createUserWithEmailAndPassword(email = email, password = password).user?.let(::FirebaseUser)
 
     /**
      * Signs in a user with the given email and password.
@@ -93,7 +90,7 @@ class FirebaseAuthService(
      * @return The authenticated FirebaseUser, or null if authentication fails.
      */
     suspend fun signInWithEmailAndPassword(email: String, password: String): FirebaseUser? =
-        auth.signInWithEmailAndPassword(email = email, password = password).user?.let(::FirebaseUser)
+        Firebase.auth(app).signInWithEmailAndPassword(email = email, password = password).user?.let(::FirebaseUser)
 
     /**
      * Reauthenticates the currently logged-in user with the provided credentials.
@@ -101,7 +98,7 @@ class FirebaseAuthService(
      * @param credential The authentication credential used for reauthentication.
      */
     suspend fun reauthenticateUser(credential: AuthCredential) {
-        auth.currentUser?.reauthenticate(credential = credential)
+        Firebase.auth(app).currentUser?.reauthenticate(credential = credential)
     }
 
     /**
@@ -131,14 +128,14 @@ class FirebaseAuthService(
             canHandleCodeInApp = canHandleCodeInApp,
         )
 
-        auth.sendPasswordResetEmail(email = email, actionCodeSettings = actionCodeSettings)
+        Firebase.auth(app).sendPasswordResetEmail(email = email, actionCodeSettings = actionCodeSettings)
     }
 
     /**
      * Signs out the currently logged-in user.
      */
     suspend fun signOut() {
-        auth.signOut()
+        Firebase.auth(app).signOut()
     }
 
     /**
@@ -147,14 +144,14 @@ class FirebaseAuthService(
      * Deletes the currently logged-in user from Firebase Authentication. If no user is logged in, the method does nothing.
      */
     suspend fun deleteCurrentUser() {
-        auth.currentUser?.delete()
+        Firebase.auth(app).currentUser?.delete()
     }
 
     /**
      * Updates the currently logged in user.
      */
     suspend fun updateCurrentUser(user: dev.gitlive.firebase.auth.FirebaseUser) {
-        auth.updateCurrentUser(user)
+        Firebase.auth(app).updateCurrentUser(user)
     }
 
     /**
@@ -178,10 +175,10 @@ class FirebaseAuthService(
             canHandleCodeInApp = canHandleCodeInApp,
         )
 
-        auth.sendSignInLinkToEmail(email, actionCodeSettings)
+        Firebase.auth(app).sendSignInLinkToEmail(email, actionCodeSettings)
     }
 
     fun isSignInWithEmailLink(link: String): Boolean {
-        return auth.isSignInWithEmailLink(link)
+        return Firebase.auth(app).isSignInWithEmailLink(link)
     }
 }
