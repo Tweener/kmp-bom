@@ -13,7 +13,7 @@ data class FirebaseUser(
     val githubId: String?,
     val isAnonymous: Boolean,
     val isEmailVerified: Boolean,
-    val directUser: dev.gitlive.firebase.auth.FirebaseUser
+    internal val directUser: dev.gitlive.firebase.auth.FirebaseUser
 ) {
     constructor(user: dev.gitlive.firebase.auth.FirebaseUser) : this(
         uid = user.uid,
