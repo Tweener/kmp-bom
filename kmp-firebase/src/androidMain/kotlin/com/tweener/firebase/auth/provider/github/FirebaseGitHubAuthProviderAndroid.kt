@@ -14,7 +14,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import com.google.firebase.auth.AuthResult as AndroidAuthResult
 import com.google.firebase.auth.FirebaseUser as AndroidFirebaseUser
-import com.google.firebase.auth.OAuthProvider as AndroidOAuthProvider
 import com.google.firebase.auth.FirebaseAuthUserCollisionException as AndroidCollisionException
 import dev.gitlive.firebase.auth.android
 
@@ -52,7 +51,7 @@ class FirebaseGitHubAuthProviderAndroid(
         val linkAuthResult = suspendCatching {
             currentUser?.startActivityForLinkWithProvider(
                 params,
-                oAuthProvider.accessAndroid()
+                oAuthProvider.android
             )?.linkOrSignInUser(currentUser)?.onFailure {
                 if (it is FirebaseAuthUserCollisionException || it is AndroidCollisionException) {
                     collision = true
@@ -64,7 +63,7 @@ class FirebaseGitHubAuthProviderAndroid(
         val authResult = linkAuthResult ?: suspendCatching {
             auth.startActivityForSignInWithProvider(
                 params,
-                oAuthProvider.accessAndroid()
+                oAuthProvider.android
             ).linkOrSignInUser(currentUser).onFailure {
                 if (it is FirebaseAuthUserCollisionException || it is AndroidCollisionException) {
                     collision = true
@@ -102,14 +101,5 @@ class FirebaseGitHubAuthProviderAndroid(
         }.addOnFailureListener {
             continuation.resume(Result.failure(it))
         }
-    }
-
-    /**
-     * Temporary workaround for [#620](https://github.com/GitLiveApp/firebase-kotlin-sdk/pull/620)
-     */
-    private fun OAuthProvider.accessAndroid(): AndroidOAuthProvider {
-        val field = OAuthProvider::class.java.getDeclaredField("android")
-        field.isAccessible = true
-        return field.get(this) as AndroidOAuthProvider
     }
 }

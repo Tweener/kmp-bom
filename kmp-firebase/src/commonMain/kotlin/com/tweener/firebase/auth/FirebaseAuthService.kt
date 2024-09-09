@@ -6,6 +6,7 @@ import dev.gitlive.firebase.app
 import dev.gitlive.firebase.auth.ActionCodeSettings
 import dev.gitlive.firebase.auth.AndroidPackageName
 import dev.gitlive.firebase.auth.AuthCredential
+import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,6 +24,9 @@ import kotlinx.coroutines.flow.map
 class FirebaseAuthService(
     internal val app: FirebaseApp = Firebase.app
 ) {
+
+    internal val auth: FirebaseAuth
+        get() = Firebase.auth(app)
 
     /**
      * Retrieves the currently logged-in user.
