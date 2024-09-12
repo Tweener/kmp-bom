@@ -9,4 +9,4 @@ import com.tweener.firebase.auth.provider.FirebaseAuthProvider
  */
 abstract class FirebaseAppleAuthProvider(
     firebaseAuthDataSource: FirebaseAuthDataSource,
-) : FirebaseAuthProvider<Nothing>(firebaseAuthDataSource = firebaseAuthDataSource)
+) : FirebaseAuthProvider<Any>(firebaseAuthDataSource = firebaseAuthDataSource)

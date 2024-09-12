@@ -3,10 +3,10 @@ package com.tweener.firebase.auth.provider.apple
 import cocoapods.FirebaseAuth.FIRAuth
 import cocoapods.FirebaseAuth.FIROAuthProvider
 import com.tweener.common._internal.contract.requireNotNullOrThrow
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
 import io.github.aakira.napier.Napier
 import kotlinx.cinterop.BetaInteropApi
@@ -88,7 +88,7 @@ private class AuthorizationControllerDelegate(
                     else -> {
                         firebaseAuthDataSource.getCurrentUser()
                             ?.let { user -> onResponse(Result.success(user)) }
-                            ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.APPLE)))
+                            ?: onResponse(Result.failure(FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Apple)))
                     }
                 }
             }

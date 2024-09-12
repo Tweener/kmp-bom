@@ -2,11 +2,12 @@ package com.tweener.firebase.auth.provider.google
 
 import cocoapods.GoogleSignIn.GIDSignIn
 import com.tweener.common._internal.safeLet
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
+import dev.datlag.tooling.async.suspendCatching
 import io.github.aakira.napier.Napier
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIApplication
@@ -30,45 +31,48 @@ class FirebaseGoogleAuthProviderIos(
     serverClientId: String,
 ) : FirebaseGoogleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource, serverClientId = serverClientId) {
 
-    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
-        try {
-            retrieveIdToken()
-                .onSuccess { tokens ->
-                    firebaseAuthDataSource
-                        .authenticateWithGoogleIdToken(idToken = tokens.idToken, accessToken = tokens.accessToken)
-                        ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
-                        ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
-                }
-                .onFailure { onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE))) }
-        } catch (throwable: Throwable) {
-            Napier.e(throwable) { "Couldn't sign in the user." }
-            onResponse(Result.failure(throwable))
-        }
+    override suspend fun signIn(params: FirebaseGoogleAuthParams): Result<FirebaseUser> = suspendCatching {
+        val token = retrieveIdToken().getOrThrow()
+        firebaseAuthDataSource.authenticateWithGoogleIdToken(
+            idToken = token.idToken,
+            accessToken = token.accessToken
+        ) ?: throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Google)
     }
 
     @OptIn(ExperimentalForeignApi::class)
     private suspend fun retrieveIdToken() = suspendCoroutine<Result<GoogleTokens>> { continuation ->
-        UIApplication.sharedApplication.keyWindow?.rootViewController
-            ?.let { rootViewController ->
-                GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { authResult, error ->
-                    error?.let { Napier.e { "Couldn't sign in with Google on iOS! $error" } }
+        UIApplication.sharedApplication.keyWindow?.rootViewController?.let { rootViewController ->
+            GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { authResult, error ->
+                when {
+                    error != null -> continuation.resume(
+                        Result.failure(
+                            FirebaseAuthException.Google.Unknown
+                        )
+                    )
 
-                    when {
-                        error != null -> continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
-
-                        else -> {
-                            safeLet(authResult?.user?.idToken?.tokenString, authResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
-                                continuation.resume(Result.success(GoogleTokens(idToken = idToken, accessToken = accessToken)))
-                            } ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
-                        }
+                    else -> {
+                        authResult?.user?.idToken?.tokenString?.let { idToken ->
+                            continuation.resume(
+                                Result.success(
+                                    GoogleTokens(
+                                        idToken = idToken,
+                                        accessToken = authResult?.user?.accessToken?.tokenString
+                                    )
+                                )
+                            )
+                        } ?: continuation.resume(
+                            Result.failure(
+                                FirebaseAuthException.Google.Unknown
+                            )
+                        )
                     }
                 }
             }
-            ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
+        } ?: continuation.resume(Result.failure(FirebaseAuthException.Google.Unknown))
     }
-}
 
-data class GoogleTokens(
-    val idToken: String,
-    val accessToken: String,
-)
+    data class GoogleTokens(
+        val idToken: String,
+        val accessToken: String?,
+    )
+}

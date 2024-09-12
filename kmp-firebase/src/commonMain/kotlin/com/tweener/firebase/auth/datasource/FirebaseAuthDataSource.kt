@@ -20,8 +20,23 @@ import kotlinx.coroutines.flow.map
  * @since 15/01/2024
  */
 class FirebaseAuthDataSource(
-    private val firebaseAuthService: FirebaseAuthService,
+    internal val firebaseAuthService: FirebaseAuthService,
 ) {
+
+    /**
+     * Retrieves the currently logged-in user.
+     *
+     * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
+     */
+    val user: Flow<FirebaseUser?> = firebaseAuthService.user
+
+    /**
+     * Returns the currently signed-in Firebase user, or null if no user is signed in.
+     *
+     * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
+     */
+    val currentUser: FirebaseUser?
+        get() = firebaseAuthService.currentUser
 
     /**
      * Authenticates a user with Google credentials.
@@ -111,24 +126,31 @@ class FirebaseAuthDataSource(
      *
      * @return The currently signed-in [FirebaseUser], or null if no user is signed in.
      */
-    fun getCurrentUser(): FirebaseUser? =
-        firebaseAuthService.getCurrentUser()
+    @Deprecated(
+        message = "Replace with currentUser field",
+        replaceWith = ReplaceWith("currentUser"),
+        level = DeprecationLevel.WARNING
+    )
+    fun getCurrentUser(): FirebaseUser? = firebaseAuthService.currentUser
 
     /**
      * Retrieves the currently logged-in user.
      *
      * @return A Flow emitting the currently logged-in FirebaseUser, or null if no user is logged in.
      */
-    fun getCurrentUserAsFlow(): Flow<FirebaseUser?> =
-        firebaseAuthService.getCurrentUserAsFlow()
+    @Deprecated(
+        message = "Replace with user field",
+        replaceWith = ReplaceWith("user"),
+        level = DeprecationLevel.WARNING
+    )
+    fun getCurrentUserAsFlow(): Flow<FirebaseUser?> = firebaseAuthService.user
 
     /**
      * Checks if a user is currently logged in.
      *
      * @return A Flow emitting a Boolean indicating whether a user is logged in.
      */
-    fun isUserLoggedIn(): Flow<Boolean> =
-        getCurrentUserAsFlow().map { it != null }
+    fun isUserLoggedIn(): Flow<Boolean> = user.map { it != null }
 
     /**
      * Signs out the currently logged-in user.
@@ -142,5 +164,41 @@ class FirebaseAuthDataSource(
      */
     suspend fun deleteCurrentUser() {
         firebaseAuthService.deleteCurrentUser()
+    }
+
+    /**
+     * Updates the currently logged in user.
+     */
+    suspend fun updateCurrentUser(user: dev.gitlive.firebase.auth.FirebaseUser) {
+        firebaseAuthService.updateCurrentUser(user)
+    }
+
+    /**
+     * Updates the currently logged in user.
+     */
+    suspend fun updateCurrentUser(user: FirebaseUser) = updateCurrentUser(user.directUser)
+
+    suspend fun sendSignInLinkToEmail(
+        email: String,
+        url: String,
+        iOSBundleId: String? = null,
+        androidPackageName: String? = null,
+        installIfNotAvailable: Boolean = true,
+        minimumVersion: String? = null,
+        canHandleCodeInApp: Boolean = false,
+    ) {
+        firebaseAuthService.sendSignInLinkToEmail(
+            email = email,
+            url = url,
+            iOSBundleId = iOSBundleId,
+            androidPackageName = androidPackageName,
+            installIfNotAvailable = installIfNotAvailable,
+            minimumVersion = minimumVersion,
+            canHandleCodeInApp = canHandleCodeInApp
+        )
+    }
+
+    fun isSignInWithEmailLink(link: String): Boolean {
+        return firebaseAuthService.isSignInWithEmailLink(link)
     }
 }

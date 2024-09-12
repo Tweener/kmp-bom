@@ -1,11 +1,11 @@
 package com.tweener.firebase.auth.provider.apple
 
+import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderNotImplementedException
-import com.tweener.firebase.auth.provider.FirebaseAuthProviderUnknownUserException
 import com.tweener.firebase.auth.provider.FirebaseProvider
+import dev.datlag.tooling.async.suspendCatching
 
 /**
  * @author Vivien Mahe
@@ -15,8 +15,8 @@ class FirebaseAppleAuthProviderAndroid(
     firebaseAuthDataSource: FirebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService()),
 ) : FirebaseAppleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource) {
 
-    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
-        onResponse(Result.failure(FirebaseAuthProviderNotImplementedException(klass = this@FirebaseAppleAuthProviderAndroid::class)))
+    override suspend fun signIn(params: Any): Result<FirebaseUser> = suspendCatching {
+        throw FirebaseAuthException.NotImplemented(FirebaseProvider.Apple)
 
 //        val auth = Firebase.auth.android
 //
@@ -35,8 +35,8 @@ class FirebaseAppleAuthProviderAndroid(
 
     private fun handleAuthResultSuccess(onResponse: (Result<FirebaseUser>) -> Unit) {
         firebaseAuthDataSource
-            .getCurrentUser()
+            .currentUser
             ?.let { user -> onResponse(Result.success(user)) }
-            ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.APPLE)))
+            ?: onResponse(Result.failure(FirebaseAuthException.UnknownUser(provider = FirebaseProvider.Apple)))
     }
 }
