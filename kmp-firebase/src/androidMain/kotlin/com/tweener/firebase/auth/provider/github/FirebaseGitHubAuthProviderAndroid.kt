@@ -1,6 +1,7 @@
 package com.tweener.firebase.auth.provider.github
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.OAuthCredential
 import com.tweener.firebase.auth.FirebaseAuthException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
@@ -73,33 +74,60 @@ class FirebaseGitHubAuthProviderAndroid(
         }.getOrNull()
 
         authResult?.let {
-            firebaseAuthDataSource.firebaseAuthService.auth.android.updateCurrentUser(it).await()
+            firebaseAuthDataSource.firebaseAuthService.auth.android.updateCurrentUser(it.first).await()
         }
 
-        firebaseAuthDataSource.currentUser ?: if (collision) {
+        firebaseAuthDataSource.currentUser?.let {
+            it.copy(
+                github = it.github?.copy(
+                    authCredentials = authResult?.second ?: it.github.authCredentials
+                )
+            )
+        } ?: if (collision) {
             throw FirebaseAuthException.CollisionException(email = collisionEmail)
         } else {
             throw FirebaseAuthException.UnknownUser(provider = FirebaseProvider.GitHub)
         }
     }
 
-    private suspend fun Task<AndroidAuthResult?>.linkOrSignInUser(existing: AndroidFirebaseUser?): Result<AndroidFirebaseUser> = suspendCoroutine { continuation ->
+    private suspend fun Task<AndroidAuthResult?>.linkOrSignInUser(existing: AndroidFirebaseUser?): Result<Pair<AndroidFirebaseUser, FirebaseUser.AuthCredentials?>> = suspendCoroutine { continuation ->
         this.addOnSuccessListener {
             val credential = it?.credential
+            val authCredentials = (credential as? OAuthCredential)?.let { result ->
+                FirebaseUser.AuthCredentials(result)
+            }
 
             if (existing != null && credential != null) {
                 existing.linkWithCredential(credential).addOnSuccessListener { link ->
-                    continuation.resume(Result.success(link?.user ?: existing))
+                    continuation.resume(Result.success((link?.user ?: existing) to authCredentials))
                 }.addOnFailureListener { _ ->
-                    continuation.resume(Result.success(it.user ?: existing))
+                    continuation.resume(Result.success((it.user ?: existing) to authCredentials))
                 }
             } else {
-                continuation.resume((it?.user ?: existing)?.let { u -> Result.success(u) } ?: Result.failure(
-                    FirebaseAuthException.UnknownUser(provider = FirebaseProvider.GitHub)
-                ))
+                continuation.resume((it?.user ?: existing)?.let { u ->
+                    Result.success(u to authCredentials) } ?: Result.failure(
+                        FirebaseAuthException.UnknownUser(provider = FirebaseProvider.GitHub)
+                    )
+                )
             }
         }.addOnFailureListener {
             continuation.resume(Result.failure(it))
+        }
+    }
+
+    operator fun FirebaseUser.AuthCredentials.Companion.invoke(credential: OAuthCredential): FirebaseUser.AuthCredentials? {
+        val idToken = credential.idToken?.ifBlank { null }
+        val accessToken = credential.accessToken?.ifBlank { null }
+        val secret = credential.secret?.ifBlank { null }
+
+        return if (idToken == null && accessToken == null && secret == null) {
+            null
+        } else {
+            FirebaseUser.AuthCredentials(
+                idToken = idToken,
+                accessToken = accessToken,
+                secret = secret
+            )
         }
     }
 }
