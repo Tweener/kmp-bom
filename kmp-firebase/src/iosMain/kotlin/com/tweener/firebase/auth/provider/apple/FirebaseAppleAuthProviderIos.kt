@@ -77,7 +77,7 @@ private class AuthorizationControllerDelegate(
             val idTokenString = NSString.create(data = appleIDToken, encoding = NSUTF8StringEncoding)?.toString()
             requireNotNullOrThrow(idTokenString) { FirebaseAppleAuthProviderException(message = "Unable to serialize token string from data: ${appleIDToken.debugDescription}") }
 
-            val credential = FIROAuthProvider.appleCredentialWithIDToken(IDToken = idTokenString, rawNonce = nonce, fullName = appleIDCredential.fullName)
+            val credential = FIROAuthProvider.appleCredentialWithIDToken(idToken = idTokenString, rawNonce = nonce, fullName = appleIDCredential.fullName)
 
             FIRAuth.auth().signInWithCredential(credential) { authResult, error ->
                 error?.let { Napier.e { "Couldn't sign in with Apple on iOS! $error" } }
