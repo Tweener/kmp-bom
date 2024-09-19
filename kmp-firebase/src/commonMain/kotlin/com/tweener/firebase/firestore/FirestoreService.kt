@@ -34,6 +34,17 @@ class FirestoreService {
             throw throwable
         }
 
+    suspend inline fun <reified T : FirestoreModel> getAllAsFlow(collection: String): Flow<List<T>> =
+        Firebase
+            .firestore
+            .collection(collection)
+            .snapshots()
+            .onStart { Napier.d { "Listening to changes for Firestore documents in collection $collection..." } }
+            .map { it.documentChanges.onEach { document -> Napier.d { "Firestore document ${document.type} (id=${document.document.id}) in collection $collection" } } }
+            .map { documentChange -> documentChange.map { it.document.data<T>().apply { id = it.document.id } } }
+            .onEach { Napier.d { "New emitted values for Firestore in collection $collection!" } }
+            .onCompletion { throwable -> throwable?.let { Napier.e(it) { "Couldn't fetch Firestore collection $collection" } } }
+
     suspend inline fun <reified T : FirestoreModel> get(collection: String, id: String): T =
         try {
             Napier.d { "Fetching Firestore document $id in collection $collection..." }
