@@ -17,3 +17,13 @@ inline val Float.degrees: Degrees get() = Degrees(value = this.toDouble())
  * Returns a [Radians] equals to this [Float] value.
  */
 inline val Float.radians: Radians get() = Radians(value = this.toDouble())
+
+/**
+ * Applies a percentage to this [Float].
+ *
+ * Example:
+ * ```
+ * To add 15% to 240.6: 240.6f.applyPercent(15f)
+ * ```
+ */
+fun Float.applyPercent(percent: Float) = this + this * percent / 100

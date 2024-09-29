@@ -6,7 +6,7 @@ package com.tweener.common._internal.kotlinextensions
  */
 
 /**
- * Applies a percentage to this Integer.
+ * Applies a percentage to this [Int].
  *
  * Example:
  * ```

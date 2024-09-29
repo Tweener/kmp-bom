@@ -24,3 +24,13 @@ inline val Double.radians: Radians get() = Radians(value = this)
  */
 fun Double.round(decimalPrecision: Int): Double =
     kotlin.math.round(this * 10.0.pow(decimalPrecision)) / 10.0.pow(decimalPrecision)
+
+/**
+ * Applies a percentage to this [Double].
+ *
+ * Example:
+ * ```
+ * To add 15% to 240.6: 240.6.applyPercent(15f)
+ * ```
+ */
+fun Double.applyPercent(percent: Float) = this + this * percent / 100
