@@ -7,7 +7,7 @@ object BomConfiguration {
 
     // BoM configuration
     const val artifactId = "kmp-bom"
-    const val version = "2.0.4"
+    const val version = "2.0.5"
     const val compileSDK = 34
     const val minSDK = 24
 
@@ -15,7 +15,7 @@ object BomConfiguration {
 
         object Common {
             const val packageName = "com.tweener.common"
-            const val version = "1.0.8"
+            const val version = "1.0.9"
             const val namespace = "$packageName.android"
         }
 

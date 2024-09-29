@@ -10,7 +10,7 @@ import platform.Foundation.NSNumberFormatterCurrencyStyle
  * @since 20/03/2024
  */
 
-actual fun formatAmount(value: Double, currency: String, localeLanguage: String, showDecimals: Boolean): String {
+internal actual fun getFormattedAmount(value: Double, currency: String, localeLanguage: String, showDecimals: Boolean): String {
     val currencyFormatter = NSNumberFormatter().apply {
         numberStyle = NSNumberFormatterCurrencyStyle
         currencyCode = currency
