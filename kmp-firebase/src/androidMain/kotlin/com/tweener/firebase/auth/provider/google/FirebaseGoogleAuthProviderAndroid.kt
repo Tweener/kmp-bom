@@ -8,6 +8,7 @@ import androidx.credentials.GetCredentialResponse
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.tweener.common._internal.thread.suspendCatching
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
@@ -39,60 +40,58 @@ class FirebaseGoogleAuthProviderAndroid(
 
     private val credentialManager = CredentialManager.create(context)
 
-    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
-        try {
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(filterByAuthorizedAccounts)
-                .setServerClientId(serverClientId)
-                .setAutoSelectEnabled(autoSelectEnabled)
-                .build()
+    override suspend fun signIn(params: Nothing?): Result<FirebaseUser> = suspendCatching {
+        val googleIdOption = GetGoogleIdOption.Builder()
+            .setFilterByAuthorizedAccounts(filterByAuthorizedAccounts)
+            .setServerClientId(serverClientId)
+            .setAutoSelectEnabled(autoSelectEnabled)
+            .build()
 
-            val request: GetCredentialRequest = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
+        val request: GetCredentialRequest = GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
 
-            val result = credentialManager.getCredential(request = request, context = context)
+        val result = credentialManager.getCredential(request = request, context = context)
 
-            handleSignInResponse(result, onResponse)
-        } catch (throwable: Throwable) {
-            Napier.e(throwable) { "Couldn't sign in the user." }
-            onResponse(Result.failure(throwable))
-        }
+        handleSignInResponse(result).fold(
+            onSuccess = { firebaseUser -> firebaseUser },
+            onFailure = { throwable -> throw throwable },
+        )
+    }.onFailure { throwable ->
+        Napier.e(throwable) { "Couldn't sign in the user." }
     }
 
-    private suspend fun handleSignInResponse(result: GetCredentialResponse, onResponse: (Result<FirebaseUser>) -> Unit) {
+    private suspend fun handleSignInResponse(result: GetCredentialResponse): Result<FirebaseUser> = suspendCatching {
         when (val credential = result.credential) {
             is CustomCredential -> {
                 when (credential.type) {
                     GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {
-                        try {
-                            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
 
-                            val idToken = googleIdTokenCredential.idToken
-                            Napier.d { "Successful Google Sin In flow with idToken: $idToken" }
+                        val idToken = googleIdTokenCredential.idToken
+                        Napier.d { "Successful Google Sin In flow with idToken: $idToken" }
 
-                            firebaseAuthDataSource
-                                .authenticateWithGoogleIdToken(idToken = idToken)
-                                ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
-                                ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
-
-                        } catch (throwable: GoogleIdTokenParsingException) {
-                            Napier.e(throwable) { "Received an invalid google id token response." }
-                            onResponse(Result.failure(throwable))
-                        }
+                        firebaseAuthDataSource
+                            .authenticateWithGoogleIdToken(idToken = idToken)
+                            ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)
                     }
 
                     else -> {
                         Napier.d { "Unexpected type of credential" }
-                        onResponse(Result.failure(FirebaseGoogleAuthProviderUnknownCredentialException()))
+                        throw FirebaseGoogleAuthProviderUnknownCredentialException()
                     }
                 }
             }
 
             else -> {
                 Napier.d { "Unexpected type of credential" }
-                onResponse(Result.failure(FirebaseGoogleAuthProviderUnknownCredentialException()))
+                throw FirebaseGoogleAuthProviderUnknownCredentialException()
             }
+        }
+    }.onFailure { throwable ->
+        when (throwable) {
+            is GoogleIdTokenParsingException -> Napier.e(throwable) { "Received an invalid google id token response." }
+            else -> Napier.e(throwable) { "Couldn't handle sign in response with Google provider" }
         }
     }
 }

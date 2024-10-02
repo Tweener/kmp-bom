@@ -25,9 +25,8 @@ abstract class FirebaseAuthProvider<SignInParams>(
      * Abstract method to initiate the Google sign-in process.
      *
      * @param params The parameters required for the sign-in process.
-     * @param onResponse Callback to handle the result of the sign-in process. It returns a Result object containing a FirebaseUser on success, or an exception on failure.
      */
-    abstract suspend fun signIn(params: SignInParams? = null, onResponse: (Result<FirebaseUser>) -> Unit)
+    abstract suspend fun signIn(params: SignInParams? = null): Result<FirebaseUser>
 
     /**
      * Signs out the current user.

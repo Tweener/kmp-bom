@@ -2,6 +2,7 @@ package com.tweener.firebase.auth.provider.google
 
 import cocoapods.GoogleSignIn.GIDSignIn
 import com.tweener.common._internal.safeLet
+import com.tweener.common._internal.thread.suspendCatching
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
@@ -30,20 +31,17 @@ class FirebaseGoogleAuthProviderIos(
     serverClientId: String,
 ) : FirebaseGoogleAuthProvider(firebaseAuthDataSource = firebaseAuthDataSource, serverClientId = serverClientId) {
 
-    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
-        try {
-            retrieveIdToken()
-                .onSuccess { tokens ->
-                    firebaseAuthDataSource
-                        .authenticateWithGoogleIdToken(idToken = tokens.idToken, accessToken = tokens.accessToken)
-                        ?.let { firebaseUser -> onResponse(Result.success(firebaseUser)) }
-                        ?: onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)))
-                }
-                .onFailure { onResponse(Result.failure(FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE))) }
-        } catch (throwable: Throwable) {
-            Napier.e(throwable) { "Couldn't sign in the user." }
-            onResponse(Result.failure(throwable))
-        }
+    override suspend fun signIn(params: Nothing?): Result<FirebaseUser> = suspendCatching {
+        retrieveIdToken().fold(
+            onSuccess = { tokens ->
+                firebaseAuthDataSource
+                    .authenticateWithGoogleIdToken(idToken = tokens.idToken, accessToken = tokens.accessToken)
+                    ?: throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE)
+            },
+            onFailure = { throw FirebaseAuthProviderUnknownUserException(provider = FirebaseProvider.GOOGLE) },
+        )
+    }.onFailure { throwable ->
+        Napier.e(throwable) { "Couldn't sign in the user." }
     }
 
     @OptIn(ExperimentalForeignApi::class)

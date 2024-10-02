@@ -3,6 +3,8 @@ package com.tweener.firebase.auth.provider.apple
 import cocoapods.FirebaseAuth.FIRAuth
 import cocoapods.FirebaseAuth.FIROAuthProvider
 import com.tweener.common._internal.contract.requireNotNullOrThrow
+import com.tweener.common._internal.thread.resumeActive
+import com.tweener.common._internal.thread.resumeActiveWithException
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
@@ -11,6 +13,7 @@ import com.tweener.firebase.auth.provider.FirebaseProvider
 import io.github.aakira.napier.Napier
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.AuthenticationServices.ASAuthorization
 import platform.AuthenticationServices.ASAuthorizationAppleIDCredential
 import platform.AuthenticationServices.ASAuthorizationAppleIDProvider
@@ -26,6 +29,7 @@ import platform.Foundation.NSUTF8StringEncoding
 import platform.Foundation.create
 import platform.UIKit.UIApplication
 import platform.darwin.NSObject
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * @author Vivien Mahe
@@ -38,10 +42,18 @@ class FirebaseAppleAuthProviderIos(
     private lateinit var delegate: AuthorizationControllerDelegate
     private val presentationContextProvider = PresentationContextProvider()
 
-    override suspend fun signIn(params: Nothing?, onResponse: (Result<FirebaseUser>) -> Unit) {
+    override suspend fun signIn(params: Nothing?): Result<FirebaseUser> = suspendCancellableCoroutine { continuation ->
         try {
             val rawNonce = NonceFactory.createRandomNonceString()
-            delegate = AuthorizationControllerDelegate(firebaseAuthDataSource = firebaseAuthDataSource, nonce = rawNonce, onResponse = onResponse)
+            delegate = AuthorizationControllerDelegate(firebaseAuthDataSource = firebaseAuthDataSource, nonce = rawNonce) { result -> continuation.resumeActive(result) }
+
+            continuation.invokeOnCancellation {
+                Napier.d { "Canceled Apple Sign In on iOS" }
+
+                delegate.onResponse = {}
+
+                continuation.resumeActiveWithException(CancellationException())
+            }
 
             val request = ASAuthorizationAppleIDProvider().createRequest().apply {
                 requestedScopes = listOf(ASAuthorizationScopeEmail, ASAuthorizationScopeFullName)
@@ -55,7 +67,7 @@ class FirebaseAppleAuthProviderIos(
             }
         } catch (throwable: Throwable) {
             Napier.e(throwable) { "An error occurred while signing in with Apple provider" }
-            onResponse(Result.failure(throwable))
+            continuation.resumeActiveWithException(throwable)
         }
     }
 }
@@ -63,7 +75,7 @@ class FirebaseAppleAuthProviderIos(
 private class AuthorizationControllerDelegate(
     private val firebaseAuthDataSource: FirebaseAuthDataSource,
     private val nonce: String,
-    private val onResponse: (Result<FirebaseUser>) -> Unit,
+    var onResponse: (Result<FirebaseUser>) -> Unit,
 ) : ASAuthorizationControllerDelegateProtocol, NSObject() {
 
     @OptIn(BetaInteropApi::class, ExperimentalForeignApi::class)
