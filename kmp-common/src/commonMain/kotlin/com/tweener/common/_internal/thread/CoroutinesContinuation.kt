@@ -19,7 +19,6 @@ import kotlin.coroutines.resumeWithException
  */
 suspend inline fun <T, R> T.suspendCatching(crossinline block: suspend T.() -> R): Result<R> = coroutineScope {
     try {
-        runCatching { }
         Result.success(block())
     } catch (throwable: Throwable) {
         if (throwable is CancellationException) coroutineContext.ensureActive()
@@ -30,13 +29,13 @@ suspend inline fun <T, R> T.suspendCatching(crossinline block: suspend T.() -> R
 /**
  * Resumes the execution of the corresponding coroutine passing value as the return value of the last suspension point, if this [CancellationException] is still active.
  */
-inline fun <T> CancellableContinuation<T>.resumeActive(value: T): Unit {
+inline fun <T> CancellableContinuation<T>.resumeIfActive(value: T): Unit {
     if (isActive) resume(value)
 }
 
 /**
  * Resumes the execution of the corresponding coroutine so that the exception is re-thrown right after the last suspension point, if this [CancellationException] is still active.
  */
-inline fun <T> CancellableContinuation<T>.resumeActiveWithException(exception: Throwable): Unit {
+inline fun <T> CancellableContinuation<T>.resumeWithExceptionIfActive(exception: Throwable): Unit {
     if (isActive) resumeWithException(exception)
 }

@@ -12,6 +12,7 @@ import io.github.aakira.napier.Napier
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIApplication
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -45,24 +46,24 @@ class FirebaseGoogleAuthProviderIos(
     }
 
     @OptIn(ExperimentalForeignApi::class)
-    private suspend fun retrieveIdToken() = suspendCoroutine<Result<GoogleTokens>> { continuation ->
+    private suspend fun retrieveIdToken() = suspendCoroutine { continuation ->
         UIApplication.sharedApplication.keyWindow?.rootViewController
             ?.let { rootViewController ->
                 GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { authResult, error ->
                     error?.let { Napier.e { "Couldn't sign in with Google on iOS! $error" } }
 
                     when {
-                        error != null -> continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
+                        error != null -> continuation.resumeWithException(FirebaseGoogleAuthProviderException())
 
                         else -> {
                             safeLet(authResult?.user?.idToken?.tokenString, authResult?.user?.accessToken?.tokenString) { idToken, accessToken ->
                                 continuation.resume(Result.success(GoogleTokens(idToken = idToken, accessToken = accessToken)))
-                            } ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
+                            } ?: continuation.resumeWithException(FirebaseGoogleAuthProviderException())
                         }
                     }
                 }
             }
-            ?: continuation.resume(Result.failure(FirebaseGoogleAuthProviderException()))
+            ?: continuation.resumeWithException(FirebaseGoogleAuthProviderException())
     }
 }
 

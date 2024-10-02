@@ -1,10 +1,10 @@
 package com.tweener.firebase.auth.provider.google
 
 import android.content.Context
+import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -51,18 +51,19 @@ class FirebaseGoogleAuthProviderAndroid(
             .addCredentialOption(googleIdOption)
             .build()
 
-        val result = credentialManager.getCredential(request = request, context = context)
+        val credential = credentialManager.getCredential(request = request, context = context).credential
 
-        handleSignInResponse(result).fold(
+        handleSignInCredential(credential).fold(
             onSuccess = { firebaseUser -> firebaseUser },
             onFailure = { throwable -> throw throwable },
         )
     }.onFailure { throwable ->
         Napier.e(throwable) { "Couldn't sign in the user." }
+        // TODO Handle NoCredentialException: attempt another sign in, or clear credential (in case the user changed its password), sign out then sign in again, etc.
     }
 
-    private suspend fun handleSignInResponse(result: GetCredentialResponse): Result<FirebaseUser> = suspendCatching {
-        when (val credential = result.credential) {
+    private suspend fun handleSignInCredential(credential: Credential): Result<FirebaseUser> = suspendCatching {
+        when (credential) {
             is CustomCredential -> {
                 when (credential.type) {
                     GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL -> {

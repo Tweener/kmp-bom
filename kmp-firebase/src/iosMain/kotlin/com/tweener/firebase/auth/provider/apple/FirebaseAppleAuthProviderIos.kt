@@ -3,8 +3,8 @@ package com.tweener.firebase.auth.provider.apple
 import cocoapods.FirebaseAuth.FIRAuth
 import cocoapods.FirebaseAuth.FIROAuthProvider
 import com.tweener.common._internal.contract.requireNotNullOrThrow
-import com.tweener.common._internal.thread.resumeActive
-import com.tweener.common._internal.thread.resumeActiveWithException
+import com.tweener.common._internal.thread.resumeIfActive
+import com.tweener.common._internal.thread.resumeWithExceptionIfActive
 import com.tweener.firebase.auth.FirebaseAuthService
 import com.tweener.firebase.auth.FirebaseUser
 import com.tweener.firebase.auth.datasource.FirebaseAuthDataSource
@@ -45,14 +45,14 @@ class FirebaseAppleAuthProviderIos(
     override suspend fun signIn(params: Nothing?): Result<FirebaseUser> = suspendCancellableCoroutine { continuation ->
         try {
             val rawNonce = NonceFactory.createRandomNonceString()
-            delegate = AuthorizationControllerDelegate(firebaseAuthDataSource = firebaseAuthDataSource, nonce = rawNonce) { result -> continuation.resumeActive(result) }
+            delegate = AuthorizationControllerDelegate(firebaseAuthDataSource = firebaseAuthDataSource, nonce = rawNonce) { result -> continuation.resumeIfActive(result) }
 
             continuation.invokeOnCancellation {
                 Napier.d { "Canceled Apple Sign In on iOS" }
 
                 delegate.onResponse = {}
 
-                continuation.resumeActiveWithException(CancellationException())
+                continuation.resumeWithExceptionIfActive(CancellationException())
             }
 
             val request = ASAuthorizationAppleIDProvider().createRequest().apply {
@@ -67,7 +67,7 @@ class FirebaseAppleAuthProviderIos(
             }
         } catch (throwable: Throwable) {
             Napier.e(throwable) { "An error occurred while signing in with Apple provider" }
-            continuation.resumeActiveWithException(throwable)
+            continuation.resumeWithExceptionIfActive(throwable)
         }
     }
 }

@@ -34,7 +34,7 @@ class FirestoreService {
             throw throwable
         }
 
-    suspend inline fun <reified T : FirestoreModel> getAllAsFlow(collection: String): Flow<List<T>> =
+    inline fun <reified T : FirestoreModel> getAllAsFlow(collection: String): Flow<List<T>> =
         Firebase
             .firestore
             .collection(collection)
