@@ -1,14 +1,17 @@
 package com.tweener.common._internal.kotlinextensions
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
+import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.until
 
 /**
  * @author Vivien Mahe
@@ -99,3 +102,21 @@ fun LocalDateTime.toEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSyste
  * @return The LocalDateTime corresponding to the given number of milliseconds since the epoch.
  */
 fun Long.fromEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSystemDefault()) = Instant.fromEpochMilliseconds(this).toLocalDateTime(timeZone)
+
+/**
+ * Returns the number of days in the current month for this LocalDateTime.
+ *
+ * @return The number of days in the month.
+ */
+fun LocalDateTime.daysInMonth(): Int = date.daysInMonth()
+
+/**
+ * Returns the number of days in the current month for this LocalDate.
+ *
+ * @return The number of days in the month.
+ */
+fun LocalDate.daysInMonth(): Int {
+    val start = LocalDate(year, month, 1)
+    val end = start.plus(1, DateTimeUnit.MONTH)
+    return start.until(end, DateTimeUnit.DAY)
+}
