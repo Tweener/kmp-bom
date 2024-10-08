@@ -2,6 +2,7 @@ package com.tweener.common._internal.kotlinextensions
 
 import com.tweener.common._internal.utils.Degrees
 import com.tweener.common._internal.utils.Radians
+import kotlin.math.pow
 
 /**
  * @author Vivien Mahe
@@ -17,6 +18,12 @@ inline val Float.degrees: Degrees get() = Degrees(value = this.toDouble())
  * Returns a [Radians] equals to this [Float] value.
  */
 inline val Float.radians: Radians get() = Radians(value = this.toDouble())
+
+/**
+ * Rounds this [Float] with [decimalPrecision] as the number of decimal digits.
+ */
+fun Float.round(decimalPrecision: Int): Float =
+    kotlin.math.round(this * 10.0f.pow(decimalPrecision)) / 10.0f.pow(decimalPrecision)
 
 /**
  * Applies a percentage to this [Float].
