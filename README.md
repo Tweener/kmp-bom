@@ -10,7 +10,7 @@
 
 # kmp-bom
 
-The [Bill of Materials](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#bill-of-materials-bom-poms) (BoM) for this project serves as a centralized reference specifying the versions of Tweener's Kotlin Multiplatform dependencies used, ensuring consistency and streamlined dependency management across all modules that implement it.
+The [Bill of Materials](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#bill-of-materials-bom-poms) (BoM) for this project serves as a centralized reference specifying the versions of several Kotlin Multiplatform dependencies used, ensuring consistency and streamlined dependency management across all modules that implement it.
 
 #### Included libraries:
 - **[kmp-common](https://github.com/Tweener/kmp-bom/tree/main/kmp-common)**: A core library providing shared functionality and utilities to enhance Kotlin language and specific Kotlin Multiplatform targets.
