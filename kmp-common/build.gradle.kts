@@ -107,7 +107,6 @@ publishing {
     publications {
         publications.withType<MavenPublication> {
             artifact(tasks["dokkaJavadocJar"])
-            artifact(tasks["dokkaHtmlJar"])
 
             pom {
                 name.set(MavenPublishing.Libraries.Common.name)

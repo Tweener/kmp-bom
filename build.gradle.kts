@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URL
 
@@ -35,26 +34,16 @@ nexusPublishing {
 
 subprojects {
     // Dokka configuration
-    val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
-        dependsOn(tasks.dokkaJavadoc)
-        from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-        archiveClassifier.set("javadoc")
-    }
-
-    val dokkaHtmlJar by tasks.register<Jar>("dokkaHtmlJar") {
+    tasks.register<Jar>("dokkaJavadocJar") {
         dependsOn(tasks.dokkaHtml)
         from(tasks.dokkaHtml.flatMap { it.outputDirectory })
-        archiveClassifier.set("html-doc")
+        archiveClassifier.set("javadoc")
     }
 
     tasks.withType<DokkaTask>().configureEach {
         dokkaSourceSets.configureEach {
-            documentedVisibilities.set(
-                setOf(
-                    DokkaConfiguration.Visibility.PUBLIC,
-                    DokkaConfiguration.Visibility.PROTECTED
-                )
-            )
+            jdkVersion.set(ProjectConfiguration.Compiler.jvmTarget.toInt())
+            languageVersion.set(libs.versions.kotlin)
 
             sourceLink {
                 localDirectory.set(rootProject.projectDir)
