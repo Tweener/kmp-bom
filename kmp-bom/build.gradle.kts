@@ -8,10 +8,6 @@ plugins {
 group = MavenPublishing.group
 version = BomConfiguration.version
 
-bomGenerator {
-    includeDependency(libs.tweener.charts.get().toString())
-}
-
 publishing {
     publications {
         create<MavenPublication>("Bom") {
