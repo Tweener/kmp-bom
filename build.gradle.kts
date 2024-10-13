@@ -1,4 +1,7 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTask
+import java.net.URL
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -7,7 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization).apply(false)
     alias(libs.plugins.kotlin.parcelize).apply(false)
     alias(libs.plugins.kotlin.nativeCocoaPods).apply(false)
-    alias(libs.plugins.dokka).apply(false)
+    alias(libs.plugins.dokka)
     alias(libs.plugins.nexus.sonatype)
     alias(libs.plugins.dependency.versions) // ./gradlew dependencyUpdates
     alias(libs.plugins.bom.generator).apply(false)
@@ -26,6 +29,38 @@ nexusPublishing {
             username.set(gradleLocalProperties(rootDir, providers).getProperty("sonatype.username") ?: System.getenv("OSSRH_USERNAME"))
             password.set(gradleLocalProperties(rootDir, providers).getProperty("sonatype.password") ?: System.getenv("OSSRH_PASSWORD"))
             stagingProfileId.set(gradleLocalProperties(rootDir, providers).getProperty("sonatype.stagingProfileId") ?: System.getenv("OSSRH_STAGING_PROFILE_ID"))
+        }
+    }
+}
+
+subprojects {
+    // Dokka configuration
+    val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
+        dependsOn(tasks.dokkaJavadoc)
+        from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+        archiveClassifier.set("javadoc")
+    }
+
+    val dokkaHtmlJar by tasks.register<Jar>("dokkaHtmlJar") {
+        dependsOn(tasks.dokkaHtml)
+        from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+        archiveClassifier.set("html-doc")
+    }
+
+    tasks.withType<DokkaTask>().configureEach {
+        dokkaSourceSets.configureEach {
+            documentedVisibilities.set(
+                setOf(
+                    DokkaConfiguration.Visibility.PUBLIC,
+                    DokkaConfiguration.Visibility.PROTECTED
+                )
+            )
+
+            sourceLink {
+                localDirectory.set(rootProject.projectDir)
+                remoteUrl.set(URL("https://github.com/Tweener/kmp-bom/tree/main"))
+                remoteLineSuffix.set("#L")
+            }
         }
     }
 }

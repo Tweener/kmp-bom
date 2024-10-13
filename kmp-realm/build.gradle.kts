@@ -100,18 +100,7 @@ kotlin {
     }
 }
 
-// region Publishing
-
-// Dokka configuration
-val dokkaOutputDir = buildDir.resolve("dokka")
-tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
-val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
-val javadocJar = tasks.create<Jar>("javadocJar") {
-    archiveClassifier.set("javadoc")
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
-    from(dokkaOutputDir)
-}
+// region Publishing & Signing
 
 group = MavenPublishing.group
 version = BomConfiguration.Libraries.Realm.version
@@ -119,7 +108,8 @@ version = BomConfiguration.Libraries.Realm.version
 publishing {
     publications {
         publications.withType<MavenPublication> {
-            artifact(javadocJar)
+            artifact(tasks["dokkaJavadocJar"])
+            artifact(tasks["dokkaHtmlJar"])
 
             pom {
                 name.set(MavenPublishing.Libraries.Realm.name)
@@ -164,4 +154,4 @@ signing {
     }
 }
 
-// endregion Publishing
+// endregion Publishing & Signing

@@ -60,6 +60,7 @@ class FirebaseGoogleAuthProviderAndroid(
     }.onFailure { throwable ->
         Napier.e(throwable) { "Couldn't sign in the user." }
         // TODO Handle NoCredentialException: attempt another sign in, or clear credential (in case the user changed its password), sign out then sign in again, etc.
+        // https://developer.android.com/identity/sign-in/credential-manager#handle-exceptions
     }
 
     private suspend fun handleSignInCredential(credential: Credential): Result<FirebaseUser> = suspendCatching {
