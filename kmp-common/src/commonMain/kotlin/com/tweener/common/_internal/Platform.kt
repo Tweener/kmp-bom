@@ -10,7 +10,8 @@ package com.tweener.common._internal
  */
 enum class Platform {
     ANDROID,
-    IOS
+    IOS,
+    JS
 }
 
 /**

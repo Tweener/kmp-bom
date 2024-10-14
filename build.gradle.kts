@@ -16,10 +16,6 @@ plugins {
     alias(libs.plugins.realm).apply(false)
 }
 
-tasks.register("clean", Delete::class) {
-    delete(rootProject.layout.buildDirectory)
-}
-
 nexusPublishing {
     repositories {
         sonatype {

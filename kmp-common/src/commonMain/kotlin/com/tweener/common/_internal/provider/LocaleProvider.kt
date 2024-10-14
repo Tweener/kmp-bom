@@ -5,6 +5,9 @@ package com.tweener.common._internal.provider
  * @since 19/12/2023
  */
 
+const val LOCALE_LANGUAGE_DEFAULT = "en"
+const val LOCALE_COUNTRY_DEFAULT = "US"
+
 interface LocaleProvider {
     /**
      * Returns the language code of this Locale.

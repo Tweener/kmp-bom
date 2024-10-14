@@ -71,11 +71,13 @@ kotlin {
         }
     }
 
-    sourceSets {
+    js(IR) {
+        browser()
+    }
 
+    sourceSets {
         commonMain.dependencies {
             implementation(libs.napier)
-            api(libs.android.annotations)
 
             // Coroutines
             api(libs.kotlin.coroutines.core)

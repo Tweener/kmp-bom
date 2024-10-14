@@ -81,7 +81,6 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.napier)
-            api(libs.android.annotations)
 
             // Tweener
             implementation(project(":kmp-common"))

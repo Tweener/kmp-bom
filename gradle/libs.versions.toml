@@ -4,7 +4,6 @@ gradle = "8.5.2"
 dependencyVersionsPlugin = "0.51.0"
 nexusSonatype = "2.0.0"
 dokka = "1.9.20"
-androidAnnotations = "1.8.2"
 coroutines = "1.9.0-RC.2"
 napier = "2.7.1"
 kotlinxDatetime = "0.6.1"
@@ -46,7 +45,6 @@ firebase-crashlytics = { group = "dev.gitlive", name = "firebase-crashlytics", v
 # Android
 android-desugarjdklibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidCore" }
-android-annotations = { group = "androidx.annotation", name = "annotation", version.ref = "androidAnnotations" }
 
 [bundles]
 googleSignIn = ["googleSignIn-credentials", "googleSignIn-credentials-playServicesAuth", "googleSignIn-identity", "googleSignIn-playServicesAuth"]
