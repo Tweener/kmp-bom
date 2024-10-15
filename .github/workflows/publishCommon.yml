@@ -31,9 +31,9 @@ jobs:
             os: macos-latest
           - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: :kmp-common:publishJsReleasePublicationToSonatypeRepository
+          - target: :kmp-common:publishJsPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: :kmp-common:publishWasmJsReleasePublicationToSonatypeRepository
+          - target: :kmp-common:publishWasmJsPublicationToSonatypeRepository
             os: ubuntu-latest
           - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
