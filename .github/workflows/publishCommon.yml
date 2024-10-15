@@ -65,6 +65,18 @@ jobs:
           gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
+      - name: Fix permissions for JS
+        run: |
+          chmod -v -R +rX "kmp-common/build/dist/js/productionExecutable/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+
+      - name: Fix permissions for WasmJS
+        run: |
+          chmod -v -R +rX "kmp-common/build/dist/wasmJs/productionExecutable/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+
       - name: Gradle publish
         uses: gradle/actions/setup-gradle@v3
         with:
