@@ -43,7 +43,7 @@ subprojects {
 
             sourceLink {
                 localDirectory.set(rootProject.projectDir)
-                remoteUrl.set(URL("https://github.com/Tweener/kmp-bom/tree/main"))
+                remoteUrl.set(URL(MavenPublishing.Libraries.Bom.packageUrl + "/tree/main"))
                 remoteLineSuffix.set("#L")
             }
         }
