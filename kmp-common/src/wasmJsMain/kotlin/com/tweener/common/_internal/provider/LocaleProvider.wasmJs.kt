@@ -26,17 +26,10 @@ class JsLocaleProvider : LocaleProvider {
 
 actual fun createLocaleProvider(): LocaleProvider = JsLocaleProvider()
 
-private fun retrieveLocale(): Locale {
-    var locale = DEFAULT_LOCALE
-
-//    try {
-//        if (jsTypeOf(kotlinx.browser.window) != "undefined")
-//            locale = forLocaleTag(kotlinx.browser.window.navigator.language)
-//    } catch (ignore: Throwable) {
-//    }
-
-    return locale
-}
+private fun retrieveLocale(): Locale =
+    runCatching {
+        forLocaleTag(kotlinx.browser.window.navigator.language)
+    }.getOrDefault(DEFAULT_LOCALE)
 
 /**
  * Transforms a languageTag like "en_US_texas" to a Locale("en","US","texas")
