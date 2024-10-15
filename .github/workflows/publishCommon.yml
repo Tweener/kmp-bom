@@ -31,6 +31,10 @@ jobs:
             os: macos-latest
           - target: :kmp-common:publishAndroidReleasePublicationToSonatypeRepository
             os: ubuntu-latest
+          - target: :kmp-common:publishJsReleasePublicationToSonatypeRepository
+            os: ubuntu-latest
+          - target: :kmp-common:publishWasmJsReleasePublicationToSonatypeRepository
+            os: ubuntu-latest
           - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
