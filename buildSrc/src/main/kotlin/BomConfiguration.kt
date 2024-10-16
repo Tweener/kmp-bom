@@ -7,7 +7,7 @@ object BomConfiguration {
 
     // BoM configuration
     const val artifactId = "kmp-bom"
-    const val version = "2.1.1"
+    const val version = "2.1.2"
     const val compileSDK = 34
     const val minSDK = 24
 
