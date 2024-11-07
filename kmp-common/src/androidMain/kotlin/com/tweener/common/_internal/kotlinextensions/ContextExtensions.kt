@@ -1,4 +1,4 @@
-package com.tweener.common._internal.kotlinextension
+package com.tweener.common._internal.kotlinextensions
 
 import android.app.AlarmManager
 import android.app.NotificationManager
