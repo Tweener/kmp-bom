@@ -40,11 +40,6 @@ android {
         sourceCompatibility = ProjectConfiguration.Compiler.javaCompatibility
         targetCompatibility = ProjectConfiguration.Compiler.javaCompatibility
 
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    dependencies {
-        coreLibraryDesugaring(libs.android.desugarjdklibs)
     }
 }
 
