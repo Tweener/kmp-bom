@@ -12,7 +12,8 @@ enum class Platform {
     ANDROID,
     IOS,
     JS,
-    WASM_JS
+    WASM_JS,
+    JVM
 }
 
 /**
