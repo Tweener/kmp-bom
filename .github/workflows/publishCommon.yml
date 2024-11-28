@@ -35,6 +35,8 @@ jobs:
             os: ubuntu-latest
           - target: :kmp-common:publishWasmJsPublicationToSonatypeRepository
             os: ubuntu-latest
+          - target: :kmp-common:publishJvmPublicationToSonatypeRepository
+            os: ubuntu-latest
           - target: :kmp-common:publishKotlinMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
