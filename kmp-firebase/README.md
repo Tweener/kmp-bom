@@ -14,27 +14,16 @@ implementation("io.github.tweener:kmp-firebase")
 _The latest version
 is: [![](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fs01.oss.sonatype.org%2Fservice%2Flocal%2Frepo_groups%2Fpublic%2Fcontent%2Fio%2Fgithub%2Ftweener%2Fkmp-bom%2Fmaven-metadata.xml)](https://central.sonatype.com/artifact/io.github.tweener/kmp-bom)_
 
-### ⚙️ Usage
+---
 
-#### Authentication
+## ⚙️ Usage
 
-Create an instance of `FirebaseAuthDataSource` to perform authentication methods on the device's user:
+### Authentication
 
-```kotlin
-val firebaseAuthDataSource = FirebaseAuthDataSource(firebaseAuthService = FirebaseAuthService())
+For authentication with Firebase, please refer to this library: [Passage](https://github.com/Tweener/passage).
 
-// Check if a user is currently logged in
-val isUserLoggedIn = firebaseAuthDataSource.isUserLoggedIn()
-
-// Get a FirebaseUser representing the currently logged in user, if any. Returns null otherwise
-val currentUser = firebaseAuthDataSource.getCurrentUser()
-
-// Sign in a user, asynchronously, by providing a valid Google ID Token (returned by Google SSO or Google Sign-In)
-firebaseAuthDataSource.authenticateWithGoogleIdToken(idToken = "...") // Pass here a Google ID Token
-
-// Sign out the current user, asynchronously, from the device
-firebaseAuthDataSource.signOut()
-```
+![Passage logo](https://github.com/user-attachments/assets/c92f7d44-df02-4860-9ba4-fb4d4c3f3d68#gh-light-mode-only)
+![Passage logo](https://github.com/user-attachments/assets/28914622-f8b9-403b-a1b6-3c736af5e98a#gh-dark-mode-only)
 
 #### Firestore
 
@@ -85,7 +74,7 @@ firestoreService.delete(
 )
 ```
 
-#### Functions
+### Functions
 
 Create an instance of `FirebaseFunctionsService` to call a Cloud Function and specify its request and response types:
 
@@ -104,7 +93,7 @@ assertTrue(response.firstname, "John")
 assertTrue(response.lastname, "Doe")
 ```
 
-#### Remote Config
+### Remote Config
 
 Create an instance of `RemoteConfigDataSource` to retrieve properties set in Firebase Remote Config.
 A `RemoteConfigService(isDebug: Boolean)` is required to initialize a `RemoteConfigDataSource`.
@@ -124,7 +113,7 @@ val defaultUsername: String = remoteConfigDataSource.getString(key = "defaultUse
 val defaultRequestTimeoutInSeconds: Long = remoteConfigDataSource.getLong(key = "defaultRequestTimeoutInSeconds", defaultValue = 30L)
 ```
 
-#### Crashlytics
+### Crashlytics
 
 Create an instance of `CrashlyticsService` to access Firebase Crashlytics.
 
