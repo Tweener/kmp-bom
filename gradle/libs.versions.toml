@@ -54,7 +54,6 @@ android-library = { id = "com.android.library", version.ref = "gradle" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-nativeCocoaPods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 dependency-versions = { id = "com.github.ben-manes.versions", version.ref = "dependencyVersionsPlugin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 nexus-sonatype = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexusSonatype" }

@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.android.library).apply(false)
     alias(libs.plugins.kotlin.serialization).apply(false)
     alias(libs.plugins.kotlin.parcelize).apply(false)
-    alias(libs.plugins.kotlin.nativeCocoaPods).apply(false)
     alias(libs.plugins.dokka)
     alias(libs.plugins.nexus.sonatype)
     alias(libs.plugins.dependency.versions) // ./gradlew dependencyUpdates

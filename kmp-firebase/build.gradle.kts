@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dokka)
-    alias(libs.plugins.kotlin.nativeCocoaPods)
     id("maven-publish")
     id("signing")
 }
@@ -69,12 +68,6 @@ kotlin {
             baseName = "kmp-firebase"
             isStatic = true
         }
-    }
-
-    cocoapods {
-        ios.deploymentTarget = ProjectConfiguration.iOS.deploymentTarget
-
-        pod("GoogleSignIn")
     }
 
     sourceSets {
