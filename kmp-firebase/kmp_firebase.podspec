@@ -9,8 +9,7 @@ Pod::Spec.new do |spec|
     spec.vendored_frameworks      = 'build/cocoapods/framework/kmp_firebase.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target    = '12.0'
-    spec.dependency 'GoogleSignIn'
-                
+
     if !Dir.exist?('build/cocoapods/framework/kmp_firebase.framework') || Dir.empty?('build/cocoapods/framework/kmp_firebase.framework')
         raise "
 
