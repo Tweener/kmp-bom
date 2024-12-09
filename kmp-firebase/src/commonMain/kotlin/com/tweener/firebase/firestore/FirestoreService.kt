@@ -2,7 +2,6 @@ package com.tweener.firebase.firestore
 
 import com.tweener.firebase.firestore.model.FirestoreModel
 import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.firestore.ChangeType
 import dev.gitlive.firebase.firestore.firestore
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
@@ -65,15 +64,10 @@ class FirestoreService {
         Firebase
             .firestore
             .collection(collection)
+            .document(id)
             .snapshots()
-            .onStart { Napier.d { "Listening to new or updated Firestore documents matching id=$id in collection $collection..." } }
-            .map {
-                it.documentChanges
-                    .onEach { document -> Napier.d { "Firestore document ${document.type} (id=${document.document.id}) in collection $collection" } }
-                    .filter { document -> document.type == ChangeType.ADDED || document.type == ChangeType.MODIFIED }
-                    .filter { document -> document.document.id == id }
-            }
-            .mapNotNull { it.firstOrNull()?.document?.data<T>() }
+            .onStart { Napier.d { "Listening to updates on Firestore document $id in collection $collection..." } }
+            .mapNotNull { it.data<T>() }
             .onEach { Napier.d { "New emitted value for Firestore document $id in collection $collection!" } }
             .onCompletion { throwable -> throwable?.let { Napier.e(it) { "Couldn't fetch Firestore document $id in collection $collection" } } }
 
