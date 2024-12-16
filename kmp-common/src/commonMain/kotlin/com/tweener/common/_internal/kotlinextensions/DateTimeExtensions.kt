@@ -120,3 +120,17 @@ fun LocalDate.daysInMonth(): Int {
     val end = start.plus(1, DateTimeUnit.MONTH)
     return start.until(end, DateTimeUnit.DAY)
 }
+
+/**
+ * Returns a LocalDateTime that results from adding the value number of the specified unit to this date and time.
+ */
+fun LocalDateTime.plus(value: Int, unit: DateTimeUnit, timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime =
+    when (unit) {
+        is DateTimeUnit.DateBased -> {
+            this.date.plus(value, unit).atTime(time = this.time)
+        }
+
+        is DateTimeUnit.TimeBased -> {
+            toInstant(timeZone = timeZone).plus(value, unit).toLocalDateTime(timeZone = timeZone)
+        }
+    }
