@@ -12,6 +12,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.until
+import kotlin.time.Duration
 
 /**
  * @author Vivien Mahe
@@ -110,7 +111,7 @@ fun Long.fromEpochMilliseconds(timeZone: TimeZone = TimeZone.currentSystemDefaul
  */
 fun LocalDateTime.daysInMonth(): Int = date.daysInMonth()
 
-/**
+/**🎉
  * Returns the number of days in the current month for this LocalDate.
  *
  * @return The number of days in the month.
@@ -134,3 +135,9 @@ fun LocalDateTime.plus(value: Int, unit: DateTimeUnit, timeZone: TimeZone = Time
             toInstant(timeZone = timeZone).plus(value, unit).toLocalDateTime(timeZone = timeZone)
         }
     }
+
+/**
+ * Returns a LocalDateTime that results from adding the duration to this date and time.
+ */
+fun LocalDateTime.plus(duration: Duration, timeZone: TimeZone = TimeZone.currentSystemDefault()): LocalDateTime =
+    toInstant(timeZone = timeZone).plus(duration = duration).toLocalDateTime(timeZone = timeZone)
