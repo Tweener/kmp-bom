@@ -1,7 +1,7 @@
 package com.tweener.firebase.firestore
 
-import com.tweener.common._internal.kotlinextensions.fromEpochMilliseconds
-import com.tweener.common._internal.kotlinextensions.toEpochMilliseconds
+import com.tweener.kmpkit.kotlinextensions.fromEpochMilliseconds
+import com.tweener.kmpkit.kotlinextensions.toEpochMilliseconds
 import dev.gitlive.firebase.firestore.Timestamp
 import dev.gitlive.firebase.firestore.fromMilliseconds
 import dev.gitlive.firebase.firestore.toMilliseconds

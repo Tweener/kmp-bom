@@ -14,6 +14,7 @@ bomGeneratorPlugin = "1.0.0.Final"
 playServices = "21.2.0"
 googleIdIdentity = "1.1.1"
 androidCredentials = "1.3.0"
+kmpKit = "0.1.1"
 
 # Android
 androidDesugarJdkLibs = "2.1.2"
@@ -24,6 +25,7 @@ napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 realm = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
+kmpkit = { group = "io.github.tweener", name = "kmpkit", version.ref = "kmpKit" }
 
 # Coroutines
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }

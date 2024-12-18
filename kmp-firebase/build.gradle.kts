@@ -74,9 +74,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.napier)
-
-            // Tweener
-            implementation(project(":kmp-common"))
+            implementation(libs.kmpkit)
 
             // Coroutines
             api(libs.kotlin.coroutines.core)

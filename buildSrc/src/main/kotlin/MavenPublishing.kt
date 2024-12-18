@@ -31,13 +31,6 @@ object MavenPublishing {
             const val gitUrl = "github.com:Tweener/kmp-bom.git"
         }
 
-        object Common {
-            const val name = "KMPCommon"
-            const val description = "All Tweener commons stuff for Kotlin Multiplatform"
-            const val packageUrl = "https://github.com/Tweener/kmp-common"
-            const val gitUrl = "github.com:Tweener/kmp-common.git"
-        }
-
         object Firebase {
             const val name = "KMPFirebase"
             const val description = "A Kotlin Multiplatform library wrappers of GitLiveApp Firebase SDK to provide a more straightforward implementation."
