@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.nexus.sonatype)
     alias(libs.plugins.dependency.versions) // ./gradlew dependencyUpdates
     alias(libs.plugins.bom.generator).apply(false)
-    alias(libs.plugins.realm).apply(false)
 }
 
 nexusPublishing {

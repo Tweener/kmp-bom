@@ -37,12 +37,5 @@ object MavenPublishing {
             const val packageUrl = "https://github.com/Tweener/kmp-firebase"
             const val gitUrl = "github.com:Tweener/kmp-firebase.git"
         }
-
-        object Realm {
-            const val name = "KMPRealm"
-            const val description = "A Kotlin Multiplatform library wrapper to Realm Kotlin"
-            const val packageUrl = "https://github.com/Tweener/kmp-realm"
-            const val gitUrl = "github.com:Tweener/kmp-realm.git"
-        }
     }
 }
