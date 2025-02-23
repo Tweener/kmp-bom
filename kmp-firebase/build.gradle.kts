@@ -85,6 +85,7 @@ kotlin {
             api(libs.firebase.auth)
             implementation(libs.firebase.functions)
             api(libs.firebase.crashlytics)
+            api(libs.firebase.analytics)
 
             implementation(libs.kotlin.serialization.json)
         }
